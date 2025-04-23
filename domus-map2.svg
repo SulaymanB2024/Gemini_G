@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+    <!-- Atrium (About) -->
+    <g data-room="Atrium" data-section="about">
+        <path d="M350,250 h100 v100 h-100 z" fill="#2a3b4c" stroke="#DAA520" stroke-width="2"/>
+        <text x="400" y="300" text-anchor="middle" fill="#DAA520" font-family="Forum, serif">ATRIUM</text>
+    </g>
+    
+    <!-- Bibliotheca (Projects) -->
+    <g data-room="Bibliotheca" data-section="projects">
+        <path d="M475,250 h100 v100 h-100 z" fill="#2a3b4c" stroke="#DAA520" stroke-width="2"/>
+        <text x="525" y="300" text-anchor="middle" fill="#DAA520" font-family="Forum, serif">BIBLIOTHECA</text>
+    </g>
+    
+    <!-- Triclinium (Experience) -->
+    <g data-room="Triclinium" data-section="professional-experience">
+        <path d="M350,375 h100 v100 h-100 z" fill="#2a3b4c" stroke="#DAA520" stroke-width="2"/>
+        <text x="400" y="425" text-anchor="middle" fill="#DAA520" font-family="Forum, serif">TRICLINIUM</text>
+    </g>
+    
+    <!-- Decorative elements -->
+    <path d="M300,200 h400" stroke="#DAA520" stroke-width="1" opacity="0.3"/>
+    <path d="M300,500 h400" stroke="#DAA520" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Connecting paths -->
+    <path d="M400,350 v25 M525,350 v25" stroke="#DAA520" stroke-width="1" opacity="0.5" stroke-dasharray="4,4"/>
+</svg>

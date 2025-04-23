@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- Domus Outline -->
+    <path id="domus-outline" d="M100 100 h600 v400 h-600 z" fill="none" stroke="#A07B24" stroke-width="2"/>
+    
+    <!-- Atrium (About) -->
+    <g id="atrium">
+        <rect x="300" y="100" width="200" height="150" fill="#F5E6D3" stroke="#A07B24" stroke-width="2"/>
+        <text x="400" y="175" text-anchor="middle" font-family="Cinzel" fill="#800000">ATRIUM</text>
+    </g>
+    
+    <!-- Tablinum (Skills) -->
+    <g id="tablinum">
+        <rect x="300" y="250" width="200" height="100" fill="#F5E6D3" stroke="#A07B24" stroke-width="2"/>
+        <text x="400" y="300" text-anchor="middle" font-family="Cinzel" fill="#800000">TABLINUM</text>
+    </g>
+    
+    <!-- Triclinium (Experience) -->
+    <g id="triclinium">
+        <rect x="100" y="250" width="200" height="150" fill="#F5E6D3" stroke="#A07B24" stroke-width="2"/>
+        <text x="200" y="325" text-anchor="middle" font-family="Cinzel" fill="#800000">TRICLINIUM</text>
+    </g>
+    
+    <!-- Bibliotheca (Projects) -->
+    <g id="bibliotheca">
+        <rect x="500" y="250" width="200" height="150" fill="#F5E6D3" stroke="#A07B24" stroke-width="2"/>
+        <text x="600" y="325" text-anchor="middle" font-family="Cinzel" fill="#800000">BIBLIOTHECA</text>
+    </g>
+    
+    <!-- Peristylium (Leadership) -->
+    <g id="peristylium">
+        <rect x="300" y="350" width="200" height="150" fill="#F5E6D3" stroke="#A07B24" stroke-width="2"/>
+        <text x="400" y="425" text-anchor="middle" font-family="Cinzel" fill="#800000">PERISTYLIUM</text>
+    </g>
+    
+    <!-- Odeon (Music) -->
+    <g id="odeon">
+        <rect x="100" y="400" width="200" height="100" fill="#F5E6D3" stroke="#A07B24" stroke-width="2"/>
+        <text x="200" y="450" text-anchor="middle" font-family="Cinzel" fill="#800000">ODEON</text>
+    </g>
+    
+    <!-- Decorative Elements -->
+    <g id="decorative-patterns">
+        <path d="M50 50 h700" stroke="#A07B24" stroke-width="1" stroke-dasharray="4 4"/>
+        <path d="M50 550 h700" stroke="#A07B24" stroke-width="1" stroke-dasharray="4 4"/>
+    </g>
+</svg>
