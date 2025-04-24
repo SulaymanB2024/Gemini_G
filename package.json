@@ -1,0 +1,14 @@
+{
+  "name": "sulayman-portfolio",
+  "version": "1.0.0",
+  "description": "Sulayman Bowles Portfolio Website",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14.x"
+  },
+  "author": "Sulayman Bowles",
+  "license": "MIT"
+}

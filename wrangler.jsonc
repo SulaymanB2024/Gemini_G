@@ -1,0 +1,11 @@
+{
+  "name": "sulayman-portfolio",
+  "main": "index.js",
+  "compatibility_date": "2023-12-01",
+  "routes": [
+    { "pattern": "*", "script": "index.js" }
+  ],
+  "site": {
+    "bucket": "."
+  }
+}
