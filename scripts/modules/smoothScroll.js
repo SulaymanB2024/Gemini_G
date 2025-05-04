@@ -1,81 +1,77 @@
 /**
  * smoothScroll.js
- * Handles smooth scrolling functionality for anchor links
- * Version: 3.0 (Modular Architecture)
+ * Provides smooth scrolling functionality for anchor links
  */
 
 /**
- * Initializes smooth scrolling for all anchor links
+ * Scroll to the target element with a smooth animation
+ * @param {HTMLElement} targetElement - The element to scroll to
+ * @param {number} duration - Duration of scroll animation in ms
+ * @param {number} offset - Offset from the top in pixels
  */
-export function initSmoothScroll() {
-    // Get all anchor links that point to an ID
-    const anchorLinks = document.querySelectorAll('a[href^="#"]:not([href="#"])');
-    
-    // Add click event listeners to each anchor link
-    anchorLinks.forEach(link => {
-        link.addEventListener('click', smoothScrollToTarget);
-    });
-    
-    // Initialize the scroll indicator if it exists
-    initScrollIndicator();
-}
-
-/**
- * Smoothly scrolls to the target element when an anchor link is clicked
- * @param {Event} e - Click event
- */
-function smoothScrollToTarget(e) {
-    e.preventDefault();
-    
-    const targetId = this.getAttribute('href');
-    const targetElement = document.querySelector(targetId);
-    
+function scrollToElement(targetElement, duration = 800, offset = 0) {
     if (!targetElement) return;
     
-    // Calculate the target position with an offset for the fixed header
-    const headerOffset = document.querySelector('.site-header')?.offsetHeight || 0;
-    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - offset;
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
     
-    // Smooth scroll to the target
-    window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-    });
-    
-    // Update the URL hash without causing a jump
-    history.pushState(null, null, targetId);
-    
-    // If mobile menu is open, close it
-    const mobileNav = document.getElementById('mobile-nav');
-    if (mobileNav && mobileNav.classList.contains('active')) {
-        mobileNav.classList.remove('active');
+    function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const scrollProgress = Math.min(timeElapsed / duration, 1);
+        const ease = easeInOutCubic(scrollProgress);
+        
+        window.scrollTo(0, startPosition + distance * ease);
+        
+        if (timeElapsed < duration) {
+            requestAnimationFrame(animation);
+        }
     }
+    
+    // Easing function for smooth acceleration and deceleration
+    function easeInOutCubic(t) {
+        return t < 0.5 
+            ? 4 * t * t * t 
+            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+    
+    requestAnimationFrame(animation);
 }
 
 /**
- * Initializes the scroll indicator in the hero section
+ * Initialize smooth scrolling for all anchor links
+ * @param {number} headerOffset - Offset for fixed header
  */
-function initScrollIndicator() {
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    
-    if (!scrollIndicator) return;
-    
-    scrollIndicator.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Find the first section after the hero section
-        const heroSection = document.querySelector('.hero-section');
-        const targetSection = heroSection.nextElementSibling;
-        
-        if (!targetSection) return;
-        
-        // Calculate position and scroll
-        const headerOffset = document.querySelector('.site-header')?.offsetHeight || 0;
-        const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - headerOffset;
-        
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
+function initSmoothScroll(headerOffset = 70) {
+    document.addEventListener('DOMContentLoaded', () => {
+        // Handle all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return; // Skip empty anchors
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    scrollToElement(targetElement, 800, headerOffset);
+                }
+            });
         });
+        
+        // Check for hash in URL on page load
+        if (window.location.hash) {
+            const targetElement = document.querySelector(window.location.hash);
+            if (targetElement) {
+                // Slight delay to ensure page is fully loaded
+                setTimeout(() => {
+                    scrollToElement(targetElement, 800, headerOffset);
+                }, 100);
+            }
+        }
     });
 }
+
+export { initSmoothScroll, scrollToElement };

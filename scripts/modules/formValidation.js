@@ -11,42 +11,46 @@ export function initFormValidation() {
     const forms = document.querySelectorAll('form[data-validate]');
     
     forms.forEach(form => {
-        const inputs = form.querySelectorAll('input, textarea, select');
+        const fields = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
         
-        // Add validation listeners to each form field
-        inputs.forEach(input => {
-            // Skip submit buttons and elements without validation rules
-            if (input.type === 'submit' || !input.getAttribute('data-validate')) return;
-            
-            // Add blur event listener for validation
-            input.addEventListener('blur', () => {
-                validateField(input);
+        // Add validation on blur for each field
+        fields.forEach(field => {
+            field.addEventListener('blur', () => {
+                validateField(field);
             });
             
-            // Add input event for real-time feedback after first blur
-            input.addEventListener('input', () => {
-                if (input.classList.contains('is-invalid') || input.classList.contains('is-valid')) {
-                    validateField(input);
+            // Clear error state when user starts typing again
+            field.addEventListener('input', () => {
+                const errorElement = field.nextElementSibling;
+                if (errorElement && errorElement.classList.contains('error-message')) {
+                    errorElement.textContent = '';
                 }
+                field.classList.remove('invalid');
             });
         });
         
-        // Add form submit handler
+        // Handle form submission
         form.addEventListener('submit', (e) => {
-            const isValid = validateForm(form);
+            e.preventDefault();
             
-            if (!isValid) {
-                e.preventDefault();
-                
-                // Focus the first invalid field
-                const firstInvalid = form.querySelector('.is-invalid');
-                if (firstInvalid) {
-                    firstInvalid.focus();
+            // Validate all fields on submit
+            if (validateForm(form)) {
+                // Check if the form should be submitted via AJAX
+                if (form.dataset.ajax === 'true') {
+                    submitFormViaAjax(form);
+                } else {
+                    // Regular form submit
+                    form.submit();
                 }
-            } else if (form.getAttribute('data-ajax') === 'true') {
-                // Handle AJAX form submission if requested
-                e.preventDefault();
-                submitFormViaAjax(form);
+            } else {
+                // Focus on the first invalid field for better UX
+                const firstInvalidField = form.querySelector('.invalid');
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                }
+                
+                // Show error feedback
+                showFormFeedback(form, 'error', 'Please correct the errors in the form.');
             }
         });
     });
@@ -58,83 +62,90 @@ export function initFormValidation() {
  * @returns {boolean} - True if field is valid
  */
 function validateField(field) {
-    const validationType = field.getAttribute('data-validate');
-    const value = field.value.trim();
     let isValid = true;
     let errorMessage = '';
     
-    // Clear previous validation state
-    field.classList.remove('is-valid', 'is-invalid');
+    // Get validation requirements from data attributes
+    const isRequired = field.hasAttribute('required');
+    const minLength = field.getAttribute('minlength');
+    const maxLength = field.getAttribute('maxlength');
+    const pattern = field.getAttribute('pattern');
+    const fieldType = field.getAttribute('type');
+    const dataType = field.dataset.type;
     
-    // Check if field is required
-    if (field.hasAttribute('required') && value === '') {
+    // Check if empty
+    if (isRequired && !field.value.trim()) {
         isValid = false;
         errorMessage = 'This field is required.';
-    } else if (value !== '') {
-        // Only validate non-empty fields (unless required)
-        switch (validationType) {
-            case 'email':
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                isValid = emailRegex.test(value);
-                errorMessage = 'Please enter a valid email address.';
-                break;
-                
-            case 'phone':
-                const phoneRegex = /^[\d\s\+\-\(\)]{7,20}$/;
-                isValid = phoneRegex.test(value);
-                errorMessage = 'Please enter a valid phone number.';
-                break;
-                
-            case 'name':
-                const nameRegex = /^[a-zA-Z\s\-']{2,50}$/;
-                isValid = nameRegex.test(value);
-                errorMessage = 'Please enter a valid name (2-50 characters).';
-                break;
-                
-            case 'url':
-                try {
-                    new URL(value);
-                    isValid = true;
-                } catch (e) {
-                    isValid = false;
-                    errorMessage = 'Please enter a valid URL.';
-                }
-                break;
-                
-            case 'length':
-                const minLength = parseInt(field.getAttribute('data-min-length') || '2');
-                const maxLength = parseInt(field.getAttribute('data-max-length') || '1000');
-                
-                isValid = value.length >= minLength && value.length <= maxLength;
-                errorMessage = `Text must be between ${minLength} and ${maxLength} characters.`;
-                break;
-                
-            default:
-                // No specific validation or custom validation
-                isValid = true;
+    } 
+    // Check min length
+    else if (minLength && field.value.length < parseInt(minLength)) {
+        isValid = false;
+        errorMessage = `Must be at least ${minLength} characters.`;
+    } 
+    // Check max length
+    else if (maxLength && field.value.length > parseInt(maxLength)) {
+        isValid = false;
+        errorMessage = `Must be no more than ${maxLength} characters.`;
+    }
+    // Check pattern
+    else if (pattern && field.value) {
+        const regex = new RegExp(pattern);
+        if (!regex.test(field.value)) {
+            isValid = false;
+            errorMessage = field.dataset.patternMessage || 'Please enter a valid value.';
         }
     }
     
-    // Update field appearance based on validation result
-    if (isValid) {
-        field.classList.add('is-valid');
-        
-        // Update feedback message
-        const feedbackElement = field.parentNode.querySelector('.valid-feedback');
-        if (feedbackElement) {
-            feedbackElement.textContent = 'Looks good!';
-        }
-    } else {
-        field.classList.add('is-invalid');
-        
-        // Update error message
-        const feedbackElement = field.parentNode.querySelector('.invalid-feedback');
-        if (feedbackElement) {
-            feedbackElement.textContent = errorMessage;
+    // Check specific field types
+    if (fieldType === 'email' && field.value) {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(field.value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid email address.';
         }
     }
+    
+    if (dataType === 'phone' && field.value) {
+        const phoneRegex = /^\+?[0-9\s\-()]{10,20}$/;
+        if (!phoneRegex.test(field.value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid phone number.';
+        }
+    }
+    
+    // Update UI based on validation result
+    updateFieldValidationUI(field, isValid, errorMessage);
     
     return isValid;
+}
+
+/**
+ * Update the UI for a field based on validation result
+ * @param {HTMLElement} field - The field to update UI for
+ * @param {boolean} isValid - Whether field is valid
+ * @param {string} errorMessage - Error message to display if invalid
+ */
+function updateFieldValidationUI(field, isValid, errorMessage) {
+    // Remove any existing error message
+    const existingError = field.nextElementSibling;
+    if (existingError && existingError.classList.contains('error-message')) {
+        existingError.remove();
+    }
+    
+    if (isValid) {
+        field.classList.remove('invalid');
+        field.classList.add('valid');
+    } else {
+        field.classList.remove('valid');
+        field.classList.add('invalid');
+        
+        // Add error message
+        const errorElement = document.createElement('div');
+        errorElement.className = 'error-message';
+        errorElement.textContent = errorMessage;
+        field.insertAdjacentElement('afterend', errorElement);
+    }
 }
 
 /**
@@ -143,15 +154,12 @@ function validateField(field) {
  * @returns {boolean} - True if the entire form is valid
  */
 function validateForm(form) {
-    const fields = form.querySelectorAll('input, textarea, select');
+    const fields = form.querySelectorAll('input:not([type="hidden"]), select, textarea');
     let isFormValid = true;
     
     fields.forEach(field => {
-        // Skip submit buttons and elements without validation rules
-        if (field.type === 'submit' || !field.getAttribute('data-validate')) return;
-        
-        const isFieldValid = validateField(field);
-        if (!isFieldValid) {
+        const fieldIsValid = validateField(field);
+        if (!fieldIsValid) {
             isFormValid = false;
         }
     });
@@ -165,57 +173,63 @@ function validateForm(form) {
  */
 function submitFormViaAjax(form) {
     // Show loading state
-    const submitBtn = form.querySelector('[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+    const originalButtonText = submitButton?.innerHTML || 'Submit';
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    }
     
-    // Collect form data
+    // Create form data object
     const formData = new FormData(form);
-    const data = {};
+    const formObject = {};
     formData.forEach((value, key) => {
-        data[key] = value;
+        formObject[key] = value;
     });
     
-    // Get submission URL
-    const url = form.getAttribute('action') || window.location.href;
+    // Determine endpoint from form attributes
+    const endpoint = form.getAttribute('action') || '/api/contact';
     
-    // Send data using fetch API
-    fetch(url, {
+    // Send the form data
+    fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(formObject)
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Server returned an error');
         }
         return response.json();
     })
     .then(data => {
-        // Show success message
-        const successMessage = form.getAttribute('data-success-message') || 'Your message has been sent successfully!';
-        showFormMessage(form, 'success', successMessage);
+        // Handle success
+        showFormFeedback(form, 'success', 'Your message has been sent successfully!');
+        form.reset(); // Clear form
         
-        // Reset form
-        form.reset();
-        form.querySelectorAll('.is-valid').forEach(el => {
-            el.classList.remove('is-valid');
+        // Remove validation classes
+        const fields = form.querySelectorAll('input, select, textarea');
+        fields.forEach(field => {
+            field.classList.remove('valid', 'invalid');
         });
     })
     .catch(error => {
-        // Show error message
-        const errorMessage = form.getAttribute('data-error-message') || 'There was an error sending your message. Please try again.';
-        showFormMessage(form, 'error', errorMessage);
-        console.error('Error submitting form:', error);
+        // Handle error
+        console.error('Form submission error:', error);
+        showFormFeedback(
+            form, 
+            'error', 
+            'There was a problem sending your message. Please try again later.'
+        );
     })
     .finally(() => {
-        // Restore button state
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+        // Reset button state
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
     });
 }
 
@@ -223,38 +237,35 @@ function submitFormViaAjax(form) {
  * Show a form feedback message
  * @param {HTMLFormElement} form - The form to show message for
  * @param {string} type - Message type ('success' or 'error')
- * @param {string} message - Message text
+ * @param {string} message - The message to display
  */
-function showFormMessage(form, type, message) {
-    // Look for existing message container
-    let messageContainer = form.querySelector('.form-message');
-    
-    // Create if it doesn't exist
-    if (!messageContainer) {
-        messageContainer = document.createElement('div');
-        messageContainer.className = 'form-message';
-        form.prepend(messageContainer);
+function showFormFeedback(form, type, message) {
+    // Find or create feedback element
+    let feedbackElement = document.getElementById('form-status-message');
+    if (!feedbackElement) {
+        feedbackElement = document.createElement('div');
+        feedbackElement.id = 'form-status-message';
+        form.insertAdjacentElement('afterend', feedbackElement);
     }
     
-    // Set message type and content
-    messageContainer.className = `form-message ${type === 'success' ? 'form-message-success' : 'form-message-error'}`;
-    messageContainer.innerHTML = `
-        <div class="form-message-content">
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <p>${message}</p>
-        </div>
-    `;
+    // Set message content and styling
+    feedbackElement.textContent = message;
+    feedbackElement.className = `form-message ${type}-message`;
     
-    // Ensure it's visible
-    messageContainer.style.display = 'block';
+    // Show the message
+    feedbackElement.style.display = 'block';
     
-    // Scroll to message
-    messageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Scroll to message if not in view
+    feedbackElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     
-    // If success, hide after delay
+    // For success messages, hide after a delay
     if (type === 'success') {
         setTimeout(() => {
-            messageContainer.style.display = 'none';
+            feedbackElement.classList.add('fade-out');
+            setTimeout(() => {
+                feedbackElement.style.display = 'none';
+                feedbackElement.classList.remove('fade-out');
+            }, 1000);
         }, 5000);
     }
 }

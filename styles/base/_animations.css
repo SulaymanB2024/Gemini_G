@@ -1,7 +1,7 @@
 /**
  * _animations.css
  * Common animations for the Roman-themed portfolio website
- * Version: 3.0 (Modular Architecture)
+ * Version: 3.1 (Enhanced Transitions & Effects)
  */
 
 /* Fade In */
@@ -384,6 +384,273 @@
 .reveal-right.active {
     opacity: 1;
     transform: translateX(0);
+}
+
+/* NEW: Thematic Section Transitions */
+
+/* SVG Path Animation */
+@keyframes pathDraw {
+    0% {
+        stroke-dashoffset: 1000;
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
+
+.svg-path-animation path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: pathDraw 2s ease-in-out forwards;
+}
+
+/* Laurel Wreath Animation */
+@keyframes laurelUnfold {
+    0% {
+        transform: scale(0.8) rotate(-5deg);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.laurel-animation {
+    transform-origin: center;
+    animation: laurelUnfold 1.5s ease-out forwards;
+}
+
+/* Section Background Transition */
+@keyframes sectionTransition {
+    0% {
+        opacity: 0;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+    100% {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+
+.section-transition {
+    animation: sectionTransition 1s ease-out forwards;
+    position: relative;
+}
+
+.section-transition::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(
+        to bottom,
+        rgba(179, 135, 40, 0.2),
+        transparent
+    );
+    z-index: 1;
+}
+
+/* Mosaic Tile Reveal */
+@keyframes mosaicReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.mosaic-tile {
+    animation: mosaicReveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: calc(var(--tile-index, 0) * 100ms);
+}
+
+/* NEW: Dynamic Lighting & Shadow System */
+
+/* Light Source Variables (Default values) */
+:root {
+    --light-source-x: -50%;
+    --light-source-y: -50%;
+    --light-intensity: 0.8;
+}
+
+/* Dynamic Shadow */
+.dynamic-shadow {
+    box-shadow: 
+        calc(var(--light-source-x) * -0.1) 
+        calc(var(--light-source-y) * -0.1) 
+        15px 
+        rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.5s ease;
+}
+
+/* Dynamic Highlight */
+.dynamic-highlight {
+    position: relative;
+    overflow: hidden;
+}
+
+.dynamic-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at calc(50% + var(--light-source-x)) calc(50% + var(--light-source-y)),
+        rgba(255, 255, 255, calc(0.1 * var(--light-intensity, 1))),
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    transition: all 0.5s ease;
+}
+
+/* Mouse Interactive Highlight */
+.mouse-highlight {
+    position: relative;
+    overflow: hidden;
+}
+
+.mouse-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 215, 0, 0.1),
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mouse-highlight:hover::before {
+    opacity: 1;
+}
+
+/* Atmospheric Radial Gradient (Dark Mode) */
+.dark-mode .atmospheric-light {
+    position: relative;
+}
+
+.dark-mode .atmospheric-light::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at var(--light-source-x, 0%) var(--light-source-y, 0%),
+        rgba(139, 69, 19, 0.1),
+        rgba(70, 35, 10, 0.05) 30%,
+        transparent 80%
+    );
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 1;
+}
+
+/* NEW: Living Backgrounds & Textures */
+
+/* Marble Texture Animation */
+@keyframes marbleShift {
+    0% {
+        background-position: 0% 0%;
+        filter: brightness(1);
+    }
+    50% {
+        background-position: 10% 5%;
+        filter: brightness(1.1);
+    }
+    100% {
+        background-position: 0% 0%;
+        filter: brightness(1);
+    }
+}
+
+.animated-marble {
+    position: relative;
+}
+
+.animated-marble::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.05) 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.05) 75%,
+        transparent 100%
+    );
+    background-size: 200% 200%;
+    mix-blend-mode: overlay;
+    animation: marbleShift 15s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Parchment Light Flicker */
+@keyframes torchFlicker {
+    0% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: scale(1.04);
+    }
+    100% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+}
+
+.animated-parchment {
+    position: relative;
+    overflow: hidden;
+}
+
+.animated-parchment::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        ellipse at 30% 30%,
+        rgba(255, 165, 0, 0.15),
+        transparent 70%
+    );
+    mix-blend-mode: multiply;
+    animation: torchFlicker 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Parallax Section Title */
+.parallax-title {
+    transform: translateY(var(--parallax-offset, 0));
+    transition: transform 0.1s ease-out;
+    will-change: transform;
 }
 
 /* Delay Classes */
