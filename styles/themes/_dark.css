@@ -1,0 +1,223 @@
+/**
+ * _dark.css
+ * Dark mode theme styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+/* Dark Mode Theme Variables */
+.dark-mode {
+    /* Base Colors */
+    --color-deepest-brown: #121010;
+    --color-dark-brown: #1a1614;
+    --color-medium-brown: #2a2422;
+    --color-light-brown: #3a3230;
+    --color-marble-white: #f0eae0;
+    --color-off-white: #e0dbd1;
+    
+    /* Gold Palette */
+    --color-gold-dark: #a67c00;
+    --color-gold-medium: #d4a017;
+    --color-gold-light: #f4c542;
+    
+    /* Crimson Palette */
+    --color-crimson-dark: #6f1515;
+    --color-crimson: #8f2020;
+    --color-crimson-light: #af2a2a;
+    
+    /* Text Colors */
+    --text-primary: var(--color-marble-white);
+    --text-secondary: rgba(240, 234, 224, 0.7);
+    --text-accent: var(--color-gold-light);
+    
+    /* Background Colors */
+    --bg-primary: var(--color-deepest-brown);
+    --bg-secondary: var(--color-dark-brown);
+    --bg-card: var(--color-medium-brown);
+    
+    /* Border Colors */
+    --border-primary: rgba(240, 234, 224, 0.1);
+    --border-accent: var(--color-gold-medium);
+    
+    /* Shadow Colors */
+    --shadow-primary: 0 5px 15px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Dark Mode Element Overrides */
+.dark-mode .card {
+    background-color: var(--bg-card);
+    border-color: var(--border-primary);
+}
+
+.dark-mode .btn-outline {
+    border-color: var(--color-gold-light);
+    color: var(--color-gold-light);
+}
+
+.dark-mode .btn-outline:hover {
+    background-color: rgba(218, 165, 32, 0.15);
+}
+
+.dark-mode .form-control {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: var(--border-primary);
+    color: var(--text-primary);
+}
+
+.dark-mode .form-control:focus {
+    border-color: var(--color-gold-light);
+    box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.3);
+}
+
+.dark-mode .form-control::placeholder {
+    color: rgba(240, 234, 224, 0.5);
+}
+
+/* Dark Mode Section Variants */
+.dark-mode .section-decorated::before,
+.dark-mode .section-decorated::after {
+    opacity: 0.1;
+}
+
+.dark-mode .section-bg {
+    background-color: var(--color-dark-brown);
+}
+
+/* Dark Mode Navigation */
+.dark-mode .nav-link {
+    color: var(--text-secondary);
+}
+
+.dark-mode .nav-link:hover,
+.dark-mode .nav-link.active {
+    color: var(--color-gold-light);
+}
+
+.dark-mode .mobile-nav-toggle {
+    color: var(--color-marble-white);
+}
+
+/* Dark Mode Footer */
+.dark-mode .footer {
+    background-color: var(--color-deepest-brown);
+    border-top: 1px solid var(--border-primary);
+}
+
+/* Dark Mode Modal */
+.dark-mode .modal-content {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+}
+
+.dark-mode .modal-header,
+.dark-mode .modal-footer {
+    border-color: var(--border-primary);
+}
+
+.dark-mode .modal-close {
+    color: var(--text-secondary);
+}
+
+/* Dark Mode Preloader */
+.dark-mode .preloader {
+    background-color: var(--color-deepest-brown);
+}
+
+/* Dark Mode Tables */
+.dark-mode table {
+    border-color: var(--border-primary);
+}
+
+.dark-mode th {
+    background-color: var(--color-dark-brown);
+}
+
+.dark-mode tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Dark Mode Code Blocks */
+.dark-mode pre,
+.dark-mode code {
+    background-color: var(--color-deepest-brown);
+    border-color: var(--border-primary);
+}
+
+/* Dark Mode Scrollbar (Webkit) */
+.dark-mode ::-webkit-scrollbar-track {
+    background: var(--color-deepest-brown);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background-color: var(--color-light-brown);
+    border: 2px solid var(--color-deepest-brown);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-medium-brown);
+}
+
+/* Dark Mode Cards */
+.dark-mode .card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-primary);
+}
+
+.dark-mode .card-header {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border-primary);
+}
+
+/* Dark Mode Home Hero Section */
+.dark-mode .home-hero::after {
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.6) 50%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    margin-left: 1rem;
+}
+
+.dark-mode-toggle span {
+    margin-left: 0.5rem;
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .dark-mode-toggle span {
+        display: inline-block;
+    }
+}
+
+.dark-mode .dark-mode-toggle {
+    color: var(--color-gold-light);
+}
+
+/* Dark Mode Selection */
+.dark-mode ::selection {
+    background-color: rgba(218, 165, 32, 0.3);
+    color: var(--text-primary);
+}
+
+/* Dark Mode Image Adjustments */
+.dark-mode img.darken-in-dark-mode {
+    filter: brightness(0.85) contrast(1.1);
+}
+
+/* Dark Mode SVG Adjustments */
+.dark-mode .svg-icon {
+    filter: invert(0.9);
+}

@@ -1,0 +1,404 @@
+/**
+ * _hero.css
+ * Hero section styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+/* Hero Container */
+.hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 0;
+    overflow: hidden;
+}
+
+/* Background Overlay */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../assets/images/textures/marble-texture.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: -2;
+}
+
+/* Decorative Column Elements */
+.hero-column {
+    position: absolute;
+    width: 120px;
+    height: 100vh;
+    top: 0;
+    opacity: 0.1;
+    background-image: url('../../assets/images/decorative/roman-column.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    z-index: -1;
+}
+
+.hero-column-left {
+    left: 5%;
+}
+
+.hero-column-right {
+    right: 5%;
+    transform: scaleX(-1);
+}
+
+/* Content Container */
+.hero-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    z-index: 1;
+}
+
+/* Hero Grid Layout */
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+/* Text Content */
+.hero-text {
+    position: relative;
+}
+
+/* Main Heading with Roman Styled Title */
+.hero-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--text-headings);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    position: relative;
+}
+
+/* Gold Accent in Title */
+.hero-title .accent {
+    color: var(--text-accent);
+    position: relative;
+    display: inline-block;
+}
+
+/* Subtitle */
+.hero-subtitle {
+    font-family: var(--font-subtitle);
+    font-style: italic;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 500px;
+}
+
+/* Typed Text Container */
+.hero-typed-container {
+    height: 1.8em;
+    font-family: var(--font-subtitle);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--text-accent);
+    margin-bottom: 2rem;
+}
+
+/* Hero Description */
+.hero-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+    margin-bottom: 2.5rem;
+    max-width: 500px;
+}
+
+/* Call to Action Buttons */
+.hero-buttons {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-secondary);
+    font-family: var(--font-subtitle);
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
+}
+
+.scroll-arrow {
+    margin-top: 0.5rem;
+    width: 24px;
+    height: 24px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Hero Visual - Mosaic Effect */
+.hero-visual {
+    position: relative;
+}
+
+.mosaic-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    perspective: 1000px;
+}
+
+.mosaic-tile {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background-color: var(--bg-primary);
+    border: 1px solid rgba(218, 165, 32, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+/* Hover effect for mosaic tiles */
+.mosaic-tile:hover {
+    transform: translateZ(20px) rotate(5deg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+/* Tile Images */
+.mosaic-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.mosaic-tile:hover img {
+    opacity: 1;
+}
+
+/* Profile Image Container */
+.profile-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--color-gold-medium);
+    box-shadow: 
+        0 0 0 5px rgba(218, 165, 32, 0.3),
+        0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile Image */
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Laurel Decoration */
+.laurel-decoration {
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url('../../assets/images/decorative/laurel-wreath.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+/* Social Media Links */
+.hero-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.hero-social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-primary);
+    transition: all 0.3s ease;
+}
+
+.hero-social-link:hover {
+    background-color: var(--text-accent);
+    color: var(--text-on-dark);
+    transform: translateY(-3px);
+    border-color: var(--text-accent);
+}
+
+/* Decorative Elements */
+.hero-decoration {
+    position: absolute;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.hero-decoration.spqr {
+    top: 15%;
+    right: 5%;
+    width: 150px;
+    height: 150px;
+    background-image: url('../../assets/images/decorative/spqr-eagle.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(15deg);
+}
+
+.hero-decoration.scroll {
+    bottom: 10%;
+    left: 10%;
+    width: 100px;
+    height: 100px;
+    background-image: url('../../assets/images/decorative/scroll-icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+    
+    .hero {
+        padding: 3rem 0;
+    }
+    
+    .hero-description,
+    .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 600px;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-visual {
+        order: -1;
+    }
+    
+    .hero-social {
+        justify-content: center;
+    }
+    
+    .hero-column {
+        display: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero {
+        min-height: auto;
+        padding: 4rem 0;
+    }
+    
+    .profile-container {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .laurel-decoration {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .profile-container {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .laurel-decoration {
+        width: 240px;
+        height: 240px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .hero-content {
+        padding: 0 1.5rem;
+    }
+}

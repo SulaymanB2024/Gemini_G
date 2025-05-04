@@ -1,0 +1,351 @@
+/**
+ * _modals.css
+ * Modal component styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+/* Modal Backdrop */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    z-index: var(--z-modal);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Container */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    max-width: 90%;
+    width: 800px;
+    max-height: 90vh;
+    background-color: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    z-index: calc(var(--z-modal) + 1);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s var(--transition-timing-bounce);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Roman Styled Modal */
+.modal-roman {
+    border: 2px double var(--color-gold-dark);
+    position: relative;
+}
+
+.modal-roman::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    bottom: 6px;
+    left: 6px;
+    border: 1px solid rgba(218, 165, 32, 0.3);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Modal Header */
+.modal-header {
+    padding: 1.5rem 2rem;
+    position: relative;
+    border-bottom: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
+}
+
+.modal-header h2 {
+    font-family: var(--font-title);
+    color: var(--text-headings);
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.modal-subtitle {
+    font-family: var(--font-subtitle);
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-top: 0.25rem;
+}
+
+/* Close Button */
+.modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 36px;
+    height: 36px;
+    background-color: transparent;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-round);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.modal-close:hover {
+    background-color: var(--color-crimson);
+    border-color: var(--color-crimson);
+    color: var(--color-marble-white);
+    transform: rotate(90deg);
+}
+
+.modal-close i {
+    font-size: 1.2rem;
+}
+
+/* Modal Content */
+.modal-content {
+    padding: 2rem;
+    overflow-y: auto;
+    max-height: calc(90vh - 130px); /* Account for header & footer */
+}
+
+/* Project Modal Content */
+.project-modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2rem;
+}
+
+.project-modal-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-modal-media {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+}
+
+.project-modal-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-md);
+}
+
+.project-modal-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.gallery-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.gallery-thumbnail:hover {
+    transform: translateY(-3px);
+}
+
+.gallery-thumbnail.active {
+    border-color: var(--color-gold-medium);
+}
+
+.gallery-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Project Details */
+.project-details {
+    margin-top: 1.5rem;
+}
+
+.project-details h3 {
+    font-family: var(--font-title);
+    font-size: 1.25rem;
+    color: var(--text-headings);
+    margin-bottom: 0.5rem;
+}
+
+.project-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.project-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.project-meta-item i {
+    color: var(--text-accent);
+}
+
+.project-description {
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+/* Project Skills & Tags */
+.project-skills {
+    margin: 1.5rem 0;
+}
+
+.project-skills h4 {
+    font-family: var(--font-subtitle);
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-tag {
+    background-color: var(--bg-accent-subtle);
+    color: var(--text-accent);
+    border-radius: 50px;
+    padding: 0.35rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Project Links */
+.project-links {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 1.25rem 2rem;
+    border-top: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Modal Animations */
+@keyframes modal-fade-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.modal-animation-fade {
+    animation: modal-fade-in 0.3s forwards;
+}
+
+/* Modal Size Variants */
+.modal-sm {
+    max-width: 500px;
+}
+
+.modal-lg {
+    width: 1000px;
+}
+
+.modal-xl {
+    width: 1200px;
+}
+
+.modal-fullscreen {
+    width: 95%;
+    height: 95vh;
+    max-height: 95vh;
+    max-width: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .project-modal-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-modal-media {
+        order: -1;
+    }
+    
+    .modal-xl, .modal-lg {
+        width: 95%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+    }
+    
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .modal-close {
+        top: 1rem;
+        right: 1rem;
+        width: 32px;
+        height: 32px;
+    }
+    
+    .gallery-thumbnail {
+        width: 60px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .modal-content {
+        padding: 1.25rem;
+    }
+    
+    .project-links {
+        flex-direction: column;
+    }
+}

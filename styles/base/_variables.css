@@ -1,0 +1,185 @@
+/**
+ * _variables.css
+ * Global CSS variables for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+:root {
+    /* Color Palette - Roman Empire Theme */
+    /* Main Colors */
+    --color-crimson: #8c1c13;
+    --color-crimson-light: #a82723;
+    --color-crimson-dark: #69140e;
+    --color-gold: #daa520;
+    --color-gold-light: #f2d06b;
+    --color-gold-medium: #daa520;
+    --color-gold-dark: #b38728;
+    --color-marble-white: #f5f5f5;
+    --color-marble-cream: #f4f1ea;
+    --color-parchment: #eee5d4;
+    --color-stone-light: #e3e0d5;
+    --color-stone: #d1cec7;
+    --color-stone-dark: #9c9a94;
+    
+    /* Text Colors */
+    --color-text-dark: #292c30;
+    --color-text-medium: #4d4d4d;
+    --color-text-light: #6c6c6c;
+    
+    /* Accent Colors */
+    --color-terracotta: #b45230;
+    --color-olive: #526b2d;
+    --color-navy: #24305e;
+    --color-slate: #5a697e;
+    
+    /* UI Colors */
+    --color-success: #47a447;
+    --color-info: #5bc0de;
+    --color-warning: #ed9c28;
+    --color-danger: #d9534f;
+    
+    /* Dark Mode Colors */
+    --color-dark-bg: #1e1e1e;
+    --color-dark-surface: #2d2d2d;
+    --color-dark-border: #444444;
+    --color-dark-text: #e0e0e0;
+    --color-dark-text-secondary: #a0a0a0;
+    
+    /* Semantic Color Assignments - Light Theme (Default) */
+    --bg-primary: var(--color-marble-cream);
+    --bg-secondary: var(--color-marble-white);
+    --bg-card: #ffffff;
+    --bg-accent: var(--color-crimson);
+    --bg-accent-subtle: rgba(140, 28, 19, 0.05);
+    
+    --text-primary: var(--color-text-dark);
+    --text-secondary: var(--color-text-medium);
+    --text-tertiary: var(--color-text-light);
+    --text-headings: var(--color-text-dark);
+    --text-on-dark: var(--color-marble-white);
+    --text-accent: var(--color-crimson);
+    
+    --border-primary: var(--color-stone);
+    --border-secondary: var(--color-stone-light);
+    --border-accent: var(--color-gold);
+    
+    --shadow-primary: rgba(0, 0, 0, 0.05);
+    --shadow-secondary: rgba(0, 0, 0, 0.1);
+    --shadow-accent: rgba(140, 28, 19, 0.2);
+    
+    --button-primary-bg: var(--color-crimson);
+    --button-primary-hover: var(--color-crimson-light);
+    --button-primary-active: var(--color-crimson-dark);
+    --button-primary-text: var(--color-marble-white);
+    
+    --button-secondary-bg: transparent;
+    --button-secondary-hover: rgba(0, 0, 0, 0.05);
+    --button-secondary-active: rgba(0, 0, 0, 0.1);
+    --button-secondary-text: var(--color-text-dark);
+    --button-secondary-border: var(--color-stone);
+    
+    --link-color: var(--color-crimson);
+    --link-hover: var(--color-crimson-light);
+    
+    /* Typography */
+    --font-title: 'Trajan Pro', 'Times New Roman', serif;
+    --font-subtitle: 'Cormorant Garamond', 'Georgia', serif;
+    --font-body: 'Open Sans', 'Helvetica', sans-serif;
+    --font-code: 'Courier New', monospace;
+    
+    /* Spacing */
+    --space-xxs: 0.25rem;
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2rem;
+    --space-xl: 3rem;
+    --space-xxl: 4rem;
+    
+    /* Container width */
+    --container-width: 1200px;
+    --container-padding: 2rem;
+    
+    /* Border radius */
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 16px;
+    --radius-round: 50%;
+    
+    /* Transition */
+    --transition-speed-fast: 0.15s;
+    --transition-speed-medium: 0.3s;
+    --transition-speed-slow: 0.5s;
+    --transition-timing-default: ease;
+    --transition-timing-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-timing-smooth: cubic-bezier(0.645, 0.045, 0.355, 1);
+    
+    /* Z-index scale */
+    --z-backdrop: -1;
+    --z-default: 1;
+    --z-header: 100;
+    --z-dropdown: 200;
+    --z-modal: 300;
+    --z-toast: 400;
+    --z-tooltip: 500;
+}
+
+/* Dark theme variables - Applied when .dark-mode class is added to body */
+.dark-mode {
+    --bg-primary: var(--color-dark-bg);
+    --bg-secondary: var(--color-dark-surface);
+    --bg-card: #2d2d2d;
+    --bg-accent: var(--color-crimson-light);
+    --bg-accent-subtle: rgba(168, 39, 35, 0.1);
+    
+    --text-primary: var(--color-dark-text);
+    --text-secondary: var(--color-dark-text-secondary);
+    --text-tertiary: #888888;
+    --text-headings: var(--color-gold-light);
+    --text-on-dark: var(--color-dark-text);
+    --text-accent: var(--color-gold-light);
+    
+    --border-primary: var(--color-dark-border);
+    --border-secondary: #3a3a3a;
+    --border-accent: var(--color-gold-dark);
+    
+    --shadow-primary: rgba(0, 0, 0, 0.3);
+    --shadow-secondary: rgba(0, 0, 0, 0.4);
+    --shadow-accent: rgba(179, 135, 40, 0.3);
+    
+    --button-primary-bg: var(--color-gold-medium);
+    --button-primary-hover: var(--color-gold-light);
+    --button-primary-active: var(--color-gold-dark);
+    --button-primary-text: var(--color-text-dark);
+    
+    --button-secondary-bg: transparent;
+    --button-secondary-hover: rgba(255, 255, 255, 0.05);
+    --button-secondary-active: rgba(255, 255, 255, 0.1);
+    --button-secondary-text: var(--color-dark-text);
+    --button-secondary-border: var(--color-dark-border);
+    
+    --link-color: var(--color-gold-medium);
+    --link-hover: var(--color-gold-light);
+}
+
+/* Media query breakpoints (can be referenced in other stylesheets) */
+@custom-media --viewport-xs (min-width: 576px);
+@custom-media --viewport-sm (min-width: 768px);
+@custom-media --viewport-md (min-width: 992px);
+@custom-media --viewport-lg (min-width: 1200px);
+@custom-media --viewport-xl (min-width: 1400px);
+
+/* Responsive container padding adjustments */
+@media (max-width: 767.98px) {
+    :root {
+        --container-padding: 1rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    :root {
+        --space-xl: 2rem;
+        --space-xxl: 3rem;
+    }
+}

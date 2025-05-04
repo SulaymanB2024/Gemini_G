@@ -1,0 +1,450 @@
+/**
+ * _buttons.css
+ * Button component styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+/* Base Button */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.5rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-speed-medium) var(--transition-timing-default);
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(218, 165, 32, 0.3);
+}
+
+/* Button sizes */
+.btn-sm {
+    padding: 0.4rem 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-lg {
+    padding: 0.8rem 2rem;
+    font-size: 1.125rem;
+}
+
+/* Primary Button - Roman Red/Crimson */
+.btn-primary {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--button-primary-hover);
+    color: var(--button-primary-text);
+    text-decoration: none;
+}
+
+.btn-primary:active {
+    background-color: var(--button-primary-active);
+}
+
+/* Secondary Button - Outlined */
+.btn-secondary {
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-text);
+    border-color: var(--button-secondary-border);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: var(--button-secondary-hover);
+    text-decoration: none;
+}
+
+.btn-secondary:active {
+    background-color: var(--button-secondary-active);
+}
+
+/* Gold Button - Special Roman Style */
+.btn-gold {
+    background-color: var(--color-gold-medium);
+    color: var(--color-text-dark);
+    border: 2px solid var(--color-gold-dark);
+}
+
+.btn-gold:hover,
+.btn-gold:focus {
+    background-color: var(--color-gold-light);
+    text-decoration: none;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-gold:active {
+    background-color: var(--color-gold-dark);
+    transform: translateY(-1px);
+}
+
+/* Text Button - No Background */
+.btn-text {
+    background-color: transparent;
+    color: var(--text-accent);
+    border: none;
+    padding: 0.6rem 1rem;
+}
+
+.btn-text:hover,
+.btn-text:focus {
+    color: var(--link-hover);
+    background-color: rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+}
+
+/* Roman-style Button with Decorative Elements */
+.btn-roman {
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 2px double var(--color-gold-dark);
+    position: relative;
+    overflow: hidden;
+    padding: 0.7rem 2.5rem;
+    transition: all var(--transition-speed-medium) var(--transition-timing-default);
+}
+
+.btn-roman::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border: 1px solid rgba(218, 165, 32, 0.3);
+    pointer-events: none;
+}
+
+.btn-roman::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.15) 50%, 
+        transparent 50%, 
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+.btn-roman:hover,
+.btn-roman:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}
+
+.btn-roman:active {
+    transform: translateY(-1px);
+}
+
+/* Button with Icon */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon-right {
+    flex-direction: row-reverse;
+}
+
+.btn-icon i, 
+.btn-icon svg {
+    font-size: 1.1em;
+    transition: transform var(--transition-speed-medium) var(--transition-timing-default);
+}
+
+.btn-icon:hover i,
+.btn-icon:hover svg {
+    transform: translateX(3px);
+}
+
+.btn-icon-right:hover i,
+.btn-icon-right:hover svg {
+    transform: translateX(-3px);
+}
+
+/* Circle Button */
+.btn-circle {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: var(--radius-round);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-circle.btn-sm {
+    width: 36px;
+    height: 36px;
+}
+
+.btn-circle.btn-lg {
+    width: 56px;
+    height: 56px;
+    font-size: 1.3rem;
+}
+
+/* Scroll-to-top Button */
+.scroll-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: var(--z-header);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-speed-medium) var(--transition-timing-default);
+    transform: translateY(10px);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Disabled Button State */
+.btn:disabled,
+.btn.disabled {
+    background-color: var(--color-stone-light) !important;
+    color: var(--color-text-light) !important;
+    border-color: var(--color-stone) !important;
+    cursor: not-allowed;
+    opacity: 0.65;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Full-width Button */
+.btn-block {
+    display: flex;
+    width: 100%;
+}
+
+/* Button group - horizontal */
+.btn-group {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-group .btn {
+    position: relative;
+    border-radius: 0;
+}
+
+.btn-group .btn:not(:first-child) {
+    margin-left: -2px; /* Adjust based on button border width */
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+}
+
+.btn-group .btn:hover,
+.btn-group .btn:focus,
+.btn-group .btn:active,
+.btn-group .btn.active {
+    z-index: 1; /* Ensure hovered/active buttons appear above others */
+}
+
+/* Roman style button group with decorative connector */
+.btn-group-roman {
+    position: relative;
+    padding: 5px;
+    border: 1px solid var(--color-gold-light);
+    border-radius: var(--radius-md);
+    background-image: linear-gradient(to bottom, 
+        rgba(218, 165, 32, 0.1), 
+        rgba(218, 165, 32, 0.05));
+}
+
+.btn-group-roman::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border: 1px solid rgba(218, 165, 32, 0.2);
+    border-radius: calc(var(--radius-md) - 2px);
+    pointer-events: none;
+}
+
+.btn-group-roman .btn {
+    margin: 0 3px;
+}
+
+.btn-group-roman .btn:not(:last-child)::after {
+    content: '•';
+    position: absolute;
+    right: -6px;
+    color: var(--color-gold-medium);
+    font-size: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+/* Button group - vertical */
+.btn-group-vertical {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.btn-group-vertical .btn {
+    border-radius: 0;
+    margin-left: 0 !important;
+}
+
+.btn-group-vertical .btn:not(:first-child) {
+    margin-top: -2px; /* Adjust based on button border width */
+}
+
+.btn-group-vertical .btn:first-child {
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+}
+
+.btn-group-vertical .btn:last-child {
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+}
+
+/* Roman style vertical button group */
+.btn-group-vertical.btn-group-roman .btn:not(:last-child)::after {
+    content: '•';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+}
+
+/* Button toolbar - grouping multiple button groups */
+.btn-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+/* Segmented button group with active state */
+.btn-group-segmented .btn.active {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border-color: var(--button-primary-bg);
+}
+
+.btn-group-segmented.btn-group-roman .btn.active {
+    background-color: var(--color-gold-medium);
+    color: var(--color-text-dark);
+    border-color: var(--color-gold-dark);
+}
+
+/* Toggle button */
+.btn-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.btn-toggle::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: currentColor;
+    transform: scale(0.8);
+    transition: transform 0.2s ease;
+}
+
+.btn-toggle.active::after {
+    transform: scale(1);
+}
+
+/* Responsive button adjustments */
+@media (max-width: 767.98px) {
+    .btn {
+        padding: 0.5rem 1.2rem;
+    }
+    
+    .btn-sm {
+        padding: 0.35rem 0.8rem;
+        font-size: 0.8125rem;
+    }
+    
+    .btn-lg {
+        padding: 0.7rem 1.7rem;
+        font-size: 1.0625rem;
+    }
+    
+    .btn-group-responsive {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group-responsive .btn {
+        border-radius: var(--radius-md);
+        margin-left: 0;
+    }
+    
+    .btn-group-responsive .btn:not(:first-child) {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Animation for interactive buttons */
+.btn-animated {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+}
+
+.btn-animated:hover::before {
+    transform: translateX(100%);
+}

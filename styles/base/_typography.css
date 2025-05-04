@@ -1,0 +1,307 @@
+/**
+ * _typography.css
+ * Typography styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+/* Base Typography */
+html {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+body {
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: var(--text-headings);
+    transition: color var(--transition-speed-medium) var(--transition-timing-default);
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.015em;
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    letter-spacing: 0.01em;
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Section Titles */
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-image: linear-gradient(
+        to right,
+        transparent,
+        var(--color-gold-medium),
+        transparent
+    );
+}
+
+/* Subtitles */
+.subtitle {
+    font-family: var(--font-subtitle);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1.5rem;
+}
+
+.lead {
+    font-size: 1.2rem;
+    font-family: var(--font-subtitle);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Links */
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: all var(--transition-speed-fast) var(--transition-timing-default);
+}
+
+a:hover, a:focus {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Special Text Styles */
+.text-accent {
+    color: var(--text-accent);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-small {
+    font-size: 0.875rem;
+}
+
+.text-large {
+    font-size: 1.25rem;
+}
+
+/* Quote Styles */
+blockquote {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    border-left: 3px solid var(--text-accent);
+    background-color: rgba(218, 165, 32, 0.05);
+    position: relative;
+    font-family: var(--font-subtitle);
+    font-style: italic;
+}
+
+blockquote::before {
+    content: '"';
+    font-family: Georgia, serif;
+    font-size: 4rem;
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    color: var(--text-accent);
+    opacity: 0.2;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+blockquote cite {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* Lists */
+ul, ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.75rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Roman Numeral List */
+.roman-list {
+    list-style-type: upper-roman;
+}
+
+/* Special Roman-themed text elements */
+.roman-caps {
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.roman-numerals {
+    font-family: var(--font-title);
+    font-weight: 700;
+}
+
+.roman-script {
+    font-family: var(--font-subtitle);
+    font-style: italic;
+}
+
+/* Text with decorative gold underline */
+.gold-underline {
+    position: relative;
+    display: inline-block;
+}
+
+.gold-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--color-gold-light),
+        transparent
+    );
+}
+
+/* Small Caps */
+.small-caps {
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+}
+
+/* Drop Cap */
+.drop-cap:first-letter {
+    float: left;
+    font-family: var(--font-title);
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.1em;
+    margin-top: 0.1em;
+    color: var(--text-accent);
+}
+
+/* Code Blocks */
+code, pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+code {
+    padding: 0.2em 0.4em;
+}
+
+pre {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+pre code {
+    padding: 0;
+    background-color: transparent;
+}
+
+/* Media Queries */
+@media (max-width: 767.98px) {
+    html {
+        font-size: 15px;
+    }
+    
+    .section-title {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+    
+    .section-title::after {
+        width: 60px;
+    }
+    
+    blockquote {
+        padding: 1rem 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    html {
+        font-size: 14px;
+    }
+    
+    .lead {
+        font-size: 1.1rem;
+    }
+    
+    .section-title {
+        margin-bottom: 1.75rem;
+    }
+}

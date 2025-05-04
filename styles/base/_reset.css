@@ -1,0 +1,209 @@
+/**
+ * _reset.css
+ * Resets and normalizes default browser styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+/* Box sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Document */
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* Body */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    min-height: 100vh;
+    transition: background-color var(--transition-speed-medium) var(--transition-timing-default), 
+                color var(--transition-speed-medium) var(--transition-timing-default);
+}
+
+body.preloading {
+    overflow: hidden;
+}
+
+body.no-scroll {
+    overflow: hidden;
+    padding-right: 15px; /* Prevent layout shift when scrollbar disappears */
+}
+
+/* Heading tags */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-title);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    color: var(--text-headings);
+    transition: color var(--transition-speed-medium) var(--transition-timing-default);
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 1.25rem;
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+h4 {
+    font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1rem;
+}
+
+/* Links */
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: color var(--transition-speed-fast) var(--transition-timing-default);
+}
+
+a:hover, a:focus {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Lists */
+ul, ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+th {
+    text-align: left;
+    font-family: var(--font-subtitle);
+    font-weight: 600;
+}
+
+/* Forms */
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* Focus states for accessibility */
+a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
+    outline: 2px solid var(--text-accent);
+    outline-offset: 2px;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding-left: var(--container-padding);
+    padding-right: var(--container-padding);
+}
+
+/* Section spacing */
+section {
+    padding: var(--section-spacing) 0;
+}
+
+/* Utilities */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+/* Responsive breakpoints - variable adjustments */
+@media (max-width: 1199.98px) {
+    :root {
+        --section-spacing: 4rem;
+        --container-padding: 1.25rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    :root {
+        --section-spacing: 3.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    :root {
+        --section-spacing: 3rem;
+        --container-padding: 1rem;
+    }
+    
+    h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+    h2 { font-size: clamp(1.8rem, 6vw, 2.3rem); }
+}
+
+@media (max-width: 575.98px) {
+    :root {
+        --section-spacing: 2.5rem;
+    }
+    
+    html { font-size: 15px; }
+}

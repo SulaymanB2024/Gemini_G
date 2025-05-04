@@ -1,0 +1,39 @@
+/**
+ * _footer.css
+ * Footer styles for the Roman-themed portfolio website
+ * Version: 3.0 (Modular Architecture)
+ */
+
+footer {
+    padding: 3rem var(--container-padding) 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-primary);
+    margin-top: 4rem;
+    background-color: var(--bg-secondary);
+    transition: background-color var(--transition-speed-medium) var(--transition-timing-default);
+}
+
+footer p {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+footer a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    transition: color var(--transition-speed-fast) var(--transition-timing-default);
+}
+
+footer a:hover,
+footer a:focus {
+    color: var(--text-accent);
+}
+
+/* Media query for smaller screens */
+@media (max-width: 575.98px) {
+    footer {
+        padding: 2rem var(--container-padding);
+    }
+}
