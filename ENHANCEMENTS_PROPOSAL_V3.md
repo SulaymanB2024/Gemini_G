@@ -1,10 +1,10 @@
 # ENHANCEMENTS_PROPOSAL_V3.md: Roman Portfolio Rebuild - Detailed Game Plans
 
-This document details proposed enhancements for the Roman Portfolio website rebuild, focusing on new features, visual improvements, and interactive elements designed to deepen the Roman theme and improve user engagement. **Each item now includes a detailed "Game Plan" for implementation.**
+This document details proposed enhancements for the Roman-themed portfolio website rebuild, focusing on new features, visual improvements, and interactive elements designed to deepen the Roman theme and improve user engagement. **Each item now includes a detailed "Game Plan" for implementation.**
 
 ## I. Advanced Features & Interactions
 
-1.  **Interactive "Cursus Honorum" Timeline:**
+1.  **Interactive "Cursus Honorum" Timeline:** [✓ COMPLETED May 5, 2025]
     * **Concept:** Visualize the "Professional Experience" section as a horizontal, scrollable timeline resembling a Roman road or aqueduct structure. Each significant role/job becomes a milestone marker.
     * **Interaction:** Scroll horizontally; click milestones to expand details; hover for dates; optional skill-connection highlighting.
     * **Visual Implementation:** CSS `scroll-snap`, stone/paver textures, Roman numeral/plinth markers, vertical expansion animation, JS logic.
@@ -23,7 +23,7 @@ This document details proposed enhancements for the Roman Portfolio website rebu
         * **Required Assets:** Stone/paver background texture image or CSS gradient pattern. Optional SVG icons for milestone markers.
         * **Considerations:** Ensure smooth horizontal scrolling on touch devices. Accessibility: Ensure keyboard navigation (tabbing) between milestones and expansion via Enter/Space. Manage focus correctly when milestones expand/collapse.
 
-2.  **Dynamic Skill Ecosystem Visualization:**
+2.  **Dynamic Skill Ecosystem Visualization:** [✓ COMPLETED May 4, 2025]
     * **Concept:** Create a dynamic relationship between skills, projects, and experience beyond simple filtering.
     * **Interaction:** Clicking a skill highlights related items; hovering an item highlights related skills.
     * **Visual Implementation:** CSS classes (`.skill-highlight`, `.item-dimmed`), subtle animations (pulse, border fade), JS mapping logic.
@@ -65,7 +65,7 @@ This document details proposed enhancements for the Roman Portfolio website rebu
         * **Required Assets:** Optional wax seal/scroll icon SVG for the toggle. Parchment texture image or CSS pattern. Well-structured SVG map.
         * **Considerations:** Ensure SVG structure allows easy targeting. Write clear and concise annotation notes.
 
-4.  **Contextual Roman Artifacts (Interactive Decor):**
+4.  **Contextual Roman Artifacts (Interactive Decor):** [✓ COMPLETED May 5, 2025]
     * **Concept:** Place small, interactive Roman artifact SVGs within sections for thematic detail.
     * **Interaction:** Hover triggers animation and tooltip with related fact/quote/link.
     * **Visual Implementation:** SVG illustrations, CSS hover animations, custom tooltips, JS for content/interaction.
@@ -109,7 +109,7 @@ This document details proposed enhancements for the Roman Portfolio website rebu
 
 ## II. Enhanced Visuals & Theming (Deeper Immersion)
 
-1.  **"Living" Backgrounds & Textures:**
+1.  **"Living" Backgrounds & Textures:** [✓ COMPLETED May 6, 2025]
     * **Concept:** Make static textures feel more dynamic using CSS.
     * **Visual Implementation:** Layered CSS gradients, subtle animations (`background-position`, `opacity`), noise filters, `mix-blend-mode`.
     * **Feasibility/Impact:** Medium Feasibility / High Impact.
@@ -124,7 +124,7 @@ This document details proposed enhancements for the Roman Portfolio website rebu
         * **Required Assets:** Optional base texture images. SVG filter definition for noise.
         * **Considerations:** Overuse can impact performance. Ensure subtlety. Test cross-browser compatibility for blend modes and filters.
 
-2.  **Dynamic Lighting & Shadow System:**
+2.  **Dynamic Lighting & Shadow System:** [✓ COMPLETED May 5, 2025]
     * **Concept:** Simulate more cohesive lighting using CSS variables and potentially JS for mouse interaction.
     * **Visual Implementation:** CSS variables for light direction, gradients for highlights/shadows, JS mouse tracking for reactive effects, atmospheric radial gradients in dark mode.
     * **Feasibility/Impact:** Medium-High Feasibility / High Impact.

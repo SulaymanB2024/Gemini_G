@@ -1,0 +1,391 @@
+/**
+ * _hero-parallax.css
+ * Enhanced parallax effects for the hero section
+ * Version: 2.0 - Complete Implementation with Roman-themed elements
+ */
+
+/* Parallax container in hero section */
+.hero-parallax-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    perspective: 8px;
+    perspective-origin: center;
+    transform-style: preserve-3d;
+}
+
+/* Individual parallax layers with varying speeds */
+.parallax-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    will-change: transform;
+    transform-style: preserve-3d;
+}
+
+/* Depth layer 1 - Farthest back (slowest) - Roman countryside scene */
+.parallax-layer-1 {
+    background-image: url('../../assets/images/textures/roman-mosaic-bg.jpg');
+    background-size: 150% 150%;
+    background-position: center;
+    opacity: 0.05;
+    filter: blur(2px);
+    transform: translateZ(-6px) scale(1.75);
+}
+
+/* Depth layer 2 - Architectural elements - Roman forum/columns silhouette */
+.parallax-layer-2 {
+    background-image: url('../../assets/images/decorative/roman-architecture-silhouette.png');
+    background-size: 120% 120%;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    opacity: 0.08;
+    transform: translateZ(-4px) scale(1.5);
+}
+
+/* Depth layer 3 - Decorative patterns and elements (closest) */
+.parallax-layer-3 {
+    pointer-events: none;
+    transform: translateZ(-2px) scale(1.25);
+}
+
+/* Animated side columns with parallax effect */
+.parallax-pillar {
+    position: absolute;
+    height: 100%;
+    width: 100px;
+    background-image: url('../../assets/images/decorative/roman-column.png');
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    opacity: 0.2;
+    transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 1;
+    will-change: transform;
+}
+
+.parallax-pillar.left {
+    left: 5%;
+}
+
+.parallax-pillar.right {
+    right: 5%;
+    transform: scaleX(-1);
+}
+
+/* Animated pillar effect on scroll */
+.parallax-pillar.animate-pillar {
+    animation: pillar-sway 8s infinite alternate ease-in-out;
+}
+
+@keyframes pillar-sway {
+    0% {
+        transform: translateY(0) rotate(0);
+    }
+    100% {
+        transform: translateY(-5px) rotate(0.5deg);
+    }
+}
+
+.parallax-pillar.right.animate-pillar {
+    animation: pillar-sway-right 8s infinite alternate ease-in-out;
+}
+
+@keyframes pillar-sway-right {
+    0% {
+        transform: scaleX(-1) translateY(0) rotate(0);
+    }
+    100% {
+        transform: scaleX(-1) translateY(-5px) rotate(-0.5deg);
+    }
+}
+
+/* Floating decoration elements */
+.parallax-decoration {
+    position: absolute;
+    opacity: 0;
+    will-change: transform;
+    pointer-events: none;
+    animation: float-in 1.5s forwards cubic-bezier(0.22, 1, 0.36, 1);
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+}
+
+/* SPQR Eagle */
+.parallax-decoration.eagle {
+    top: 15%;
+    right: 10%;
+    width: 100px;
+    height: 100px;
+    background-image: url('../../assets/images/decorative/spqr-eagle-vignette.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation-delay: 0.5s;
+}
+
+/* Scroll */
+.parallax-decoration.scroll {
+    bottom: 15%;
+    left: 8%;
+    width: 80px;
+    height: 80px;
+    background-image: url('../../assets/images/scroll-rod-icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation-delay: 0.8s;
+}
+
+/* Laurel decoration */
+.parallax-decoration.laurel {
+    width: 120px;
+    height: 120px;
+    background-image: url('../../assets/images/laurel-wreath.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.08;
+}
+
+.parallax-decoration.roman-laurel-left {
+    top: 20%;
+    left: 15%;
+    animation-delay: 1.2s;
+    transform: rotate(-15deg);
+}
+
+.parallax-decoration.roman-laurel-right {
+    top: 23%;
+    right: 15%;
+    animation-delay: 1.5s;
+    transform: rotate(15deg);
+}
+
+/* Wax Seal */
+.parallax-decoration.seal {
+    bottom: 20%;
+    right: 15%;
+    width: 60px;
+    height: 60px;
+    background-image: url('../../assets/images/roman-wax-seal.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation-delay: 1.5s;
+}
+
+/* Floating dots pattern - marble effect */
+.marble-dots {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(218, 165, 32, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.5;
+    animation: marble-shift 30s infinite alternate linear;
+}
+
+@keyframes marble-shift {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 20px 20px;
+    }
+}
+
+/* Pillar highlight effect on scroll */
+.pillar-highlight {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.2), transparent);
+    opacity: 0;
+    transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.parallax-pillar:hover .pillar-highlight,
+.parallax-pillar.active .pillar-highlight {
+    height: 30%;
+    opacity: 0.7;
+}
+
+/* Animation for floating elements */
+@keyframes float-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 0.15;
+        transform: translateY(0);
+    }
+}
+
+/* Float animation applied to decorative elements */
+.float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Add depth-based scaling to create more realistic parallax */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* Mosaic grid with parallax effect */
+.hero-mosaic {
+    position: relative;
+    z-index: 2;
+    transform: translateZ(0);
+}
+
+/* SPQR Banner with Roman elements */
+.spqr-banner {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+    z-index: 3;
+    animation: banner-fade-in 2s forwards cubic-bezier(0.22, 1, 0.36, 1);
+    animation-delay: 1.8s;
+    opacity: 0;
+}
+
+@keyframes banner-fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 0.7;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.spqr-text {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--color-gold-dark);
+    margin: 0 10px;
+    font-size: 1.2rem;
+}
+
+.spqr-eagle {
+    color: var(--color-gold-dark);
+    font-size: 0.9rem;
+}
+
+/* Ambient shadow around elements to create depth */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to top, var(--color-dark-bg-alt), transparent);
+    opacity: 0.5;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Enhanced depth effect on scroll */
+.parallax-active .parallax-decoration {
+    animation: glow-pulse 4s infinite alternate ease-in-out;
+}
+
+@keyframes glow-pulse {
+    0% {
+        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+        opacity: 0.15;
+    }
+    100% {
+        filter: drop-shadow(0 5px 20px rgba(218, 165, 32, 0.3));
+        opacity: 0.2;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .parallax-container {
+        perspective: 4px;
+    }
+    
+    .parallax-pillar {
+        opacity: 0.08;
+        width: 80px;
+    }
+    
+    .parallax-decoration {
+        opacity: 0.1;
+    }
+    
+    .spqr-banner {
+        top: 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .parallax-decoration.eagle,
+    .parallax-decoration.scroll {
+        display: none;
+    }
+    
+    .parallax-pillar {
+        width: 60px;
+    }
+    
+    .spqr-banner {
+        display: none;
+    }
+    
+    .hero-parallax-container {
+        perspective: 2px;
+    }
+}
+
+/* Accessibility - for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .parallax-layer,
+    .parallax-pillar,
+    .parallax-decoration,
+    .marble-dots,
+    .spqr-banner,
+    .hero-section::after {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+    
+    .parallax-layer-1,
+    .parallax-layer-2,
+    .parallax-layer-3 {
+        transform: none !important;
+    }
+    
+    .hero-parallax-container {
+        perspective: none;
+    }
+}

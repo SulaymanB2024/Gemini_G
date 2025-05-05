@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    .sword-blade { fill: #D8D8D8; stroke: #757575; stroke-width: 1.5; }
+    .sword-guard { fill: #BF9850; stroke: #6C571B; stroke-width: 1.5; }
+    .sword-handle { fill: #8B6B35; stroke: #5C4A1B; stroke-width: 1.5; }
+    .sword-pommel { fill: #BF9850; stroke: #6C571B; stroke-width: 1.5; }
+    .sword-decoration { fill: #D4AF37; stroke: none; }
+    .sword-gleam { fill: white; opacity: 0.7; }
+  </style>
+  <g transform="rotate(45, 50, 50)">
+    <!-- Blade -->
+    <path class="sword-blade" d="M45,10 L55,10 L57,60 L43,60 Z"/>
+    
+    <!-- Blade central line -->
+    <line x1="50" y1="10" x2="50" y2="60" stroke="#757575" stroke-width="1" />
+    
+    <!-- Guard (cross) -->
+    <rect class="sword-guard" x="30" y="60" width="40" height="6" rx="1" />
+    
+    <!-- Handle -->
+    <rect class="sword-handle" x="44" y="66" width="12" height="18" rx="2" />
+    
+    <!-- Handle wrapping -->
+    <line x1="44" y1="69" x2="56" y2="69" stroke="#5C4A1B" stroke-width="1" />
+    <line x1="44" y1="73" x2="56" y2="73" stroke="#5C4A1B" stroke-width="1" />
+    <line x1="44" y1="77" x2="56" y2="77" stroke="#5C4A1B" stroke-width="1" />
+    <line x1="44" y1="81" x2="56" y2="81" stroke="#5C4A1B" stroke-width="1" />
+    
+    <!-- Pommel -->
+    <circle class="sword-pommel" cx="50" cy="88" r="6" />
+    <circle class="sword-decoration" cx="50" cy="88" r="2.5" />
+    
+    <!-- Gleam on blade -->
+    <path class="sword-gleam" d="M46,15 L48,15 L48,45 L46,45 Z" />
+  </g>
+</svg>

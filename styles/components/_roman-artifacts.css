@@ -1,0 +1,402 @@
+/**
+ * Roman Artifacts Component Styles
+ * Styling for interactive Roman artifact decorative elements
+ * Version: 2.0
+ */
+
+/* =============================================
+   ARTIFACT BASE STYLING
+   ============================================= */
+
+.roman-artifact {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index: 5;
+    cursor: pointer;
+    transition: transform 0.3s var(--transition-timing-bounce),
+                filter 0.3s ease-out;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+}
+
+/* Position classes */
+.roman-artifact.position-top-left {
+    top: 30px;
+    left: 30px;
+}
+
+.roman-artifact.position-top-right {
+    top: 30px;
+    right: 30px;
+}
+
+.roman-artifact.position-bottom-left {
+    bottom: 30px;
+    left: 30px;
+}
+
+.roman-artifact.position-bottom-right {
+    bottom: 30px;
+    right: 30px;
+}
+
+/* Visual container for artifact images */
+.artifact-visual {
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.3s ease-out;
+    position: relative;
+}
+
+/* Set specific background images based on artifact type */
+.roman-artifact[data-artifact-type="roman-coin"] .artifact-visual {
+    background-image: url('/assets/images/decorative/amphora-icon.svg');
+}
+
+.roman-artifact[data-artifact-type="roman-scroll"] .artifact-visual {
+    background-image: url('/assets/images/decorative/scroll-rod-icon.png');
+}
+
+.roman-artifact[data-artifact-type="roman-lamp"] .artifact-visual {
+    background-image: url('/assets/images/decorative/lamp-icon.svg');
+}
+
+.roman-artifact[data-artifact-type="roman-amphora"] .artifact-visual {
+    background-image: url('/assets/images/decorative/amphora-icon.svg');
+}
+
+.roman-artifact[data-artifact-type="roman-gladius"] .artifact-visual {
+    background-image: url('/assets/images/decorative/gladius-icon.svg');
+}
+
+.roman-artifact[data-artifact-type="roman-laurel"] .artifact-visual {
+    background-image: url('/assets/images/decorative/laurel-outline.svg');
+}
+
+/* =============================================
+   ARTIFACT HOVER & ACTIVE STATES
+   ============================================= */
+
+.roman-artifact:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4))
+            drop-shadow(0 0 8px var(--color-gold-light));
+    z-index: 6;
+}
+
+.roman-artifact:focus-visible {
+    outline: none;
+    transform: scale(1.15);
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4))
+            drop-shadow(0 0 12px var(--color-gold-light));
+}
+
+.roman-artifact.active {
+    transform: scale(1.15);
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4))
+            drop-shadow(0 0 15px var(--color-gold-light));
+    z-index: 6;
+}
+
+/* Dark mode enhancements */
+.dark-mode .roman-artifact:hover,
+.dark-mode .roman-artifact:focus-visible,
+.dark-mode .roman-artifact.active {
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.6))
+            drop-shadow(0 0 15px var(--color-gold-light));
+}
+
+/* =============================================
+   ARTIFACT ANIMATIONS
+   ============================================= */
+
+/* Coin flip animation */
+.artifact-visual.animation-spin {
+    animation: coin-wobble 8s infinite ease-in-out;
+    transform-style: preserve-3d;
+}
+
+@keyframes coin-wobble {
+    0%, 100% { transform: rotateY(0deg); }
+    45%, 55% { transform: rotateY(180deg); }
+}
+
+/* Scroll unroll animation */
+.artifact-visual.animation-unroll {
+    animation: scroll-unroll 12s infinite ease-in-out;
+}
+
+@keyframes scroll-unroll {
+    0%, 100% { transform: scaleX(0.85); }
+    50% { transform: scaleX(1.1); }
+}
+
+/* Lamp flicker animation */
+.artifact-visual.animation-flicker {
+    animation: lamp-flicker 5s infinite;
+}
+
+@keyframes lamp-flicker {
+    0%, 100% { filter: brightness(1); }
+    5% { filter: brightness(1.3); }
+    10% { filter: brightness(0.9); }
+    15% { filter: brightness(1.2); }
+    20% { filter: brightness(1); }
+    65% { filter: brightness(1); }
+    70% { filter: brightness(1.3); }
+    75% { filter: brightness(0.9); }
+    80% { filter: brightness(1.2); }
+    85% { filter: brightness(1); }
+}
+
+/* Amphora rock animation */
+.artifact-visual.animation-rock {
+    animation: amphora-rock 6s infinite ease-in-out;
+    transform-origin: bottom center;
+}
+
+@keyframes amphora-rock {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+/* Gladius gleam animation */
+.artifact-visual.animation-gleam {
+    position: relative;
+    overflow: hidden;
+}
+
+.artifact-visual.animation-gleam::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 50%;
+    height: 50%;
+    background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    animation: gladius-gleam 7s infinite;
+}
+
+@keyframes gladius-gleam {
+    0%, 100% { top: -100%; left: -100%; }
+    40%, 60% { top: 150%; left: 150%; }
+}
+
+/* Laurel rotate animation */
+.artifact-visual.animation-rotate {
+    animation: laurel-rotate 15s infinite linear;
+    transform-origin: center;
+}
+
+@keyframes laurel-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* =============================================
+   ARTIFACT TOOLTIP
+   ============================================= */
+
+.roman-artifact-tooltip {
+    position: absolute;
+    z-index: 1000;
+    width: 300px;
+    padding: 0;
+    border-radius: 8px;
+    background-color: rgba(245, 240, 230, 0.95);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3), 
+                0 0 0 1px rgba(218, 165, 32, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    transform: translateY(10px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    /* Roman-style border decoration */
+    border: 1px solid var(--color-gold-dark);
+    overflow: hidden;
+}
+
+.roman-artifact-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Header styling */
+.roman-artifact-tooltip .tooltip-header {
+    background: linear-gradient(to right, 
+                rgba(218, 165, 32, 0.7), 
+                rgba(165, 124, 27, 0.7));
+    color: var(--color-white);
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-gold-dark);
+}
+
+.roman-artifact-tooltip .tooltip-title {
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.tooltip-decoration {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+}
+
+/* Body styling */
+.roman-artifact-tooltip .tooltip-body {
+    padding: 15px;
+}
+
+.roman-artifact-tooltip p {
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #333;
+}
+
+.roman-artifact-tooltip p:last-child {
+    margin-bottom: 0;
+}
+
+.roman-artifact-tooltip .tooltip-description {
+    font-family: var(--font-body);
+}
+
+.roman-artifact-tooltip .tooltip-fact {
+    margin-top: 12px;
+    font-family: var(--font-subtitle);
+    font-style: italic;
+    color: #555;
+    font-size: 0.9rem;
+    padding-left: 10px;
+    border-left: 3px solid rgba(218, 165, 32, 0.3);
+}
+
+.roman-artifact-tooltip .tooltip-relevance {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--color-crimson-primary);
+    font-weight: 500;
+}
+
+/* Arrow styling */
+.roman-artifact-tooltip .tooltip-arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: rgba(245, 240, 230, 0.95);
+    transform: rotate(45deg);
+    top: -6px;
+    left: 50%;
+    margin-left: -6px;
+    box-shadow: -1px -1px 0 0 rgba(218, 165, 32, 0.3);
+}
+
+/* Dark mode styling */
+.dark-mode .roman-artifact-tooltip {
+    background-color: rgba(40, 40, 40, 0.95);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(218, 165, 32, 0.5),
+                0 0 15px rgba(218, 165, 32, 0.2);
+}
+
+.dark-mode .roman-artifact-tooltip .tooltip-header {
+    background: linear-gradient(to right,
+                rgba(165, 124, 27, 0.8),
+                rgba(132, 98, 21, 0.8));
+}
+
+.dark-mode .roman-artifact-tooltip p {
+    color: #e0e0e0;
+}
+
+.dark-mode .roman-artifact-tooltip .tooltip-fact {
+    color: #aaa;
+    border-left-color: rgba(218, 165, 32, 0.5);
+}
+
+.dark-mode .roman-artifact-tooltip .tooltip-arrow {
+    background-color: rgba(40, 40, 40, 0.95);
+    box-shadow: -1px -1px 0 0 rgba(218, 165, 32, 0.5);
+}
+
+/* =============================================
+   ARTIFACT PARTICLE EFFECTS
+   ============================================= */
+
+/* Ripple effect */
+.artifact-ripple {
+    border-radius: 50%;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 767.98px) {
+    .roman-artifact {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .roman-artifact.position-top-left,
+    .roman-artifact.position-top-right {
+        top: 15px;
+    }
+    
+    .roman-artifact.position-bottom-left,
+    .roman-artifact.position-bottom-right {
+        bottom: 15px;
+    }
+    
+    .roman-artifact.position-top-left,
+    .roman-artifact.position-bottom-left {
+        left: 15px;
+    }
+    
+    .roman-artifact.position-top-right,
+    .roman-artifact.position-bottom-right {
+        right: 15px;
+    }
+    
+    .roman-artifact-tooltip {
+        width: 250px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .roman-artifact {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .roman-artifact-tooltip {
+        width: 230px;
+        max-width: calc(100vw - 40px);
+    }
+    
+    .roman-artifact-tooltip .tooltip-title {
+        font-size: 1rem;
+    }
+    
+    .roman-artifact-tooltip p {
+        font-size: 0.85rem;
+    }
+}

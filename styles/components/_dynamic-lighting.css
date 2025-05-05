@@ -1,0 +1,263 @@
+/**
+ * Dynamic Lighting & Shadow System Component
+ * CSS variables and styles for cohesive lighting effects
+ * Version: 1.0
+ */
+
+:root {
+    /* Global light source position (percentage from top-left) */
+    --light-source-x: -30%;
+    --light-source-y: -30%;
+    
+    /* Light characteristics */
+    --light-intensity: 1;
+    --light-color: 255, 240, 220; /* RGB values for warm light */
+    --dark-light-color: 180, 160, 120; /* RGB values for dark mode light */
+    
+    /* Shadow characteristics */
+    --shadow-strength: 0.2; /* Base opacity for shadows */
+    --shadow-blur: 15px;
+    --shadow-spread: 0px;
+    --shadow-color: 0, 0, 0; /* RGB values for shadow */
+    
+    /* Highlight characteristics */
+    --highlight-strength: 0.15; /* Base opacity for highlights */
+    --highlight-blur: 20px;
+    --highlight-spread: -5px;
+    
+    /* Element-specific lighting (set by JS) */
+    --element-light-x: 0%;
+    --element-light-y: 0%;
+}
+
+/* Dark mode adjustments */
+.dark-mode {
+    --shadow-strength: 0.35;
+    --shadow-blur: 20px;
+    --highlight-strength: 0.12;
+    --light-color: var(--dark-light-color);
+}
+
+/* Base dynamic shadow for elements */
+.dynamic-shadow {
+    box-shadow: 
+        calc(var(--light-source-x) * -0.01) 
+        calc(var(--light-source-y) * -0.01)
+        var(--shadow-blur)
+        var(--shadow-spread)
+        rgba(var(--shadow-color), var(--shadow-strength));
+    transition: box-shadow 0.2s ease-out;
+}
+
+/* Stronger shadow variant */
+.dynamic-shadow-strong {
+    box-shadow: 
+        calc(var(--light-source-x) * -0.015) 
+        calc(var(--light-source-y) * -0.015)
+        calc(var(--shadow-blur) * 1.5)
+        var(--shadow-spread)
+        rgba(var(--shadow-color), calc(var(--shadow-strength) * 1.3));
+    transition: box-shadow 0.3s ease-out;
+}
+
+/* Card highlight effect */
+.dynamic-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.dynamic-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 
+        calc(50% + var(--light-source-x) * 0.7) 
+        calc(50% + var(--light-source-y) * 0.7), 
+        rgba(var(--light-color), var(--highlight-strength)),
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.3s ease-out;
+}
+
+/* Mouse reactive element (using element-specific lighting) */
+[data-lighting="reactive"] {
+    position: relative;
+    z-index: 1;
+}
+
+[data-lighting="reactive"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        circle at 
+        calc(50% + var(--element-light-x)) 
+        calc(50% + var(--element-light-y)), 
+        rgba(var(--light-color), calc(var(--highlight-strength) * 1.5)),
+        transparent 80%
+    );
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+}
+
+[data-lighting="reactive"]:hover::before {
+    opacity: 1;
+}
+
+/* Buttons with reactive lighting */
+.btn[data-lighting="reactive"]::before {
+    z-index: 1;
+    mix-blend-mode: overlay;
+}
+
+/* Directional lighting for cards */
+.directional-light {
+    position: relative;
+    overflow: hidden;
+}
+
+.directional-light::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom right,
+        rgba(var(--light-color), calc(var(--highlight-strength) * 0.8)) 0%,
+        transparent 60%
+    );
+    transform: 
+        rotate(calc(var(--light-source-x) * 0.9deg))
+        translate(calc(var(--light-source-y) * 0.5%), calc(var(--light-source-x) * 0.5%));
+    pointer-events: none;
+    z-index: 1;
+    transition: transform 0.3s ease-out;
+}
+
+/* Edge lighting effect for panels */
+.edge-light {
+    position: relative;
+    z-index: 1;
+}
+
+.edge-light::before {
+    content: '';
+    position: absolute;
+    inset: -1px; /* Slightly larger than container */
+    background: 
+        linear-gradient(
+            calc(90deg + atan(var(--light-source-y)/var(--light-source-x)) * 1deg),
+            rgba(var(--light-color), calc(var(--highlight-strength) * 2)) 0%,
+            transparent 50%
+        );
+    border-radius: inherit;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Text shadow effects */
+.dynamic-text-shadow {
+    text-shadow: 
+        calc(var(--light-source-x) * -0.005) 
+        calc(var(--light-source-y) * -0.005)
+        3px 
+        rgba(var(--shadow-color), calc(var(--shadow-strength) * 0.6));
+    transition: text-shadow 0.3s ease;
+}
+
+.dark-mode .dynamic-text-shadow {
+    text-shadow: 
+        calc(var(--light-source-x) * -0.007) 
+        calc(var(--light-source-y) * -0.007)
+        4px
+        rgba(var(--shadow-color), calc(var(--shadow-strength) * 0.8));
+}
+
+/* Atmospheric lighting for dark mode */
+.dark-mode .section {
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-mode .section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(
+            circle at calc(100% + var(--light-source-x)) 0%, 
+            rgba(80, 60, 30, 0.1) 0%,
+            transparent 60%
+        ),
+        radial-gradient(
+            circle at 0% calc(100% + var(--light-source-y)), 
+            rgba(90, 50, 30, 0.05) 0%,
+            transparent 60%
+        );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Border lighting effects */
+.light-border {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.light-border::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid transparent;
+    border-top-color: rgba(255, 255, 255, calc(0.15 + var(--light-source-y) * -0.001));
+    border-left-color: rgba(255, 255, 255, calc(0.15 + var(--light-source-x) * -0.001));
+    pointer-events: none;
+    z-index: 1;
+    transition: border-color 0.3s ease;
+}
+
+/* Performance optimizations */
+.dynamic-shadow,
+.dynamic-shadow-strong,
+.dynamic-card::before,
+[data-lighting="reactive"]::before,
+.directional-light::after,
+.edge-light::before {
+    will-change: transform, opacity;
+}
+
+/* Accessibility - Disable lighting effects when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+    .dynamic-shadow,
+    .dynamic-shadow-strong {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, var(--shadow-strength));
+        transition: none;
+    }
+
+    .dynamic-card::before,
+    [data-lighting="reactive"]::before,
+    .directional-light::after,
+    .edge-light::before,
+    .dark-mode .section::before {
+        display: none;
+    }
+}

@@ -1,6 +1,6 @@
 /**
  * Main CSS Entry Point
- * Imports all modular CSS files
+ * Imports all individual stylesheets
  * Version: 3.0 (Modular Architecture)
  */
 
@@ -10,28 +10,32 @@
 @import './base/_typography.css';
 @import './base/_animations.css';
 
-/* Layout Components */
+/* Layout */
 @import './layout/_layout.css';
 @import './layout/_header.css';
 @import './layout/_footer.css';
 
-/* UI Components */
+/* Components */
 @import './components/_buttons.css';
 @import './components/_cards.css';
 @import './components/_forms.css';
 @import './components/_hero.css';
+@import './components/_hero-parallax.css';
 @import './components/_modals.css';
 @import './components/_navigation.css';
 @import './components/_preloaders.css';
+@import './components/_project-modal.css';
+@import './components/_skill-ecosystem.css';
+@import './components/_living-backgrounds.css';
+@import './components/_roman-artifacts.css';
+@import './components/_cursus-honorum.css';
+@import './components/_dynamic-lighting.css';
 
-/* Utility Classes */
-@import './utils/_utilities.css';
+/* Pages */
+@import './pages/_home.css';
 
-/* Theme Styles */
+/* Themes */
 @import './themes/_dark.css';
 
-/* Page-specific Styles */
-@import './pages/_home.css';
-/* @import './pages/_about.css'; */
-/* @import './pages/_portfolio.css'; */
-/* @import './pages/_contact.css'; */
+/* Utilities */
+@import './utils/_utilities.css';

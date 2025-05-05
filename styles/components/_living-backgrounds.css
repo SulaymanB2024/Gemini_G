@@ -1,0 +1,327 @@
+/**
+ * Living Backgrounds Component Styles
+ * Creates subtle dynamic effects for static background textures
+ * Version: 1.0
+ */
+
+/* =============================================
+   SVG FILTERS FOR TEXTURES
+   ============================================= */
+
+/* Filter definitions - should be included in the main HTML */
+/* 
+<svg style="display: none;">
+  <filter id="noise-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.15 0"/>
+  </filter>
+  
+  <filter id="subtle-grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.05 0"/>
+  </filter>
+  
+  <filter id="marble-texture-filter">
+    <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" seed="5" stitchTiles="stitch"/>
+    <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.15 0"/>
+    <feGaussianBlur stdDeviation="0.5"/>
+  </filter>
+</svg>
+*/
+
+/* =============================================
+   MARBLE TEXTURE ANIMATION
+   ============================================= */
+
+.living-marble {
+    position: relative;
+    overflow: hidden;
+}
+
+.living-marble::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    background: 
+        linear-gradient(
+            110deg,
+            rgba(255, 255, 255, 0) 20%,
+            rgba(255, 255, 255, 0.1) 35%,
+            rgba(255, 255, 255, 0.05) 75%
+        );
+    z-index: 1;
+    pointer-events: none;
+    animation: marble-light-shift 20s ease-in-out infinite alternate;
+    opacity: 0.7;
+    mix-blend-mode: soft-light;
+}
+
+.living-marble::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-color: transparent;
+    opacity: 0.05;
+    filter: url(#marble-texture-filter);
+    animation: marble-texture-shift 30s linear infinite alternate;
+    mix-blend-mode: multiply;
+}
+
+@keyframes marble-light-shift {
+    0% {
+        transform: translateX(-10%) translateY(-10%) rotate(-5deg);
+    }
+    100% {
+        transform: translateX(10%) translateY(10%) rotate(5deg);
+    }
+}
+
+@keyframes marble-texture-shift {
+    0% {
+        opacity: 0.03;
+        filter: url(#marble-texture-filter);
+    }
+    50% {
+        opacity: 0.07;
+        filter: url(#subtle-grain);
+    }
+    100% {
+        opacity: 0.03;
+        filter: url(#marble-texture-filter);
+    }
+}
+
+/* =============================================
+   PARCHMENT TEXTURE ANIMATION
+   ============================================= */
+
+.living-parchment {
+    position: relative;
+    overflow: hidden;
+}
+
+.living-parchment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at var(--torch-position-x, 20%) var(--torch-position-y, 30%), 
+        rgba(255, 220, 130, 0.12),
+        rgba(255, 220, 130, 0.03) 40%,
+        transparent 70%
+    );
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 1;
+    animation: parchment-light 30s ease-in-out infinite;
+}
+
+.living-parchment::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.08;
+    pointer-events: none;
+    filter: url(#subtle-grain);
+    z-index: 1;
+}
+
+@keyframes parchment-light {
+    0%, 100% {
+        --torch-position-x: 20%;
+        --torch-position-y: 30%;
+        opacity: 0.8;
+    }
+    25% {
+        --torch-position-x: 70%;
+        --torch-position-y: 20%;
+        opacity: 0.9;
+    }
+    50% {
+        --torch-position-x: 65%;
+        --torch-position-y: 60%;
+        opacity: 0.7;
+    }
+    75% {
+        --torch-position-x: 30%;
+        --torch-position-y: 70%;
+        opacity: 0.9;
+    }
+}
+
+/* =============================================
+   MOSAIC TEXTURE ANIMATION
+   ============================================= */
+
+.living-mosaic {
+    position: relative;
+    overflow: hidden;
+}
+
+.living-mosaic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at var(--mosaic-highlight-x, 50%) var(--mosaic-highlight-y, 50%), 
+        rgba(255, 255, 255, 0.15),
+        rgba(255, 255, 255, 0) 70%
+    );
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 1;
+    animation: mosaic-highlight-shift 20s ease-in-out infinite alternate;
+}
+
+.living-mosaic.with-cracks::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('/assets/images/textures/mosaic-cracks.png');
+    background-size: cover;
+    opacity: 0.03;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 1;
+    animation: mosaic-cracks-shift 40s linear infinite alternate;
+}
+
+@keyframes mosaic-highlight-shift {
+    0% {
+        --mosaic-highlight-x: 30%;
+        --mosaic-highlight-y: 30%;
+        opacity: 0.12;
+    }
+    25% {
+        --mosaic-highlight-x: 70%;
+        --mosaic-highlight-y: 20%;
+        opacity: 0.15;
+    }
+    50% {
+        --mosaic-highlight-x: 80%;
+        --mosaic-highlight-y: 70%;
+        opacity: 0.1;
+    }
+    75% {
+        --mosaic-highlight-x: 20%;
+        --mosaic-highlight-y: 80%;
+        opacity: 0.15;
+    }
+    100% {
+        --mosaic-highlight-x: 30%;
+        --mosaic-highlight-y: 30%;
+        opacity: 0.12;
+    }
+}
+
+@keyframes mosaic-cracks-shift {
+    0% {
+        opacity: 0.03;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.05;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 0.03;
+        transform: scale(1);
+    }
+}
+
+/* =============================================
+   DARK MODE ADJUSTMENTS
+   ============================================= */
+
+.dark-mode .living-marble::before {
+    opacity: 0.12;
+    mix-blend-mode: screen;
+}
+
+.dark-mode .living-marble::after {
+    opacity: 0.1;
+    mix-blend-mode: soft-light;
+}
+
+.dark-mode .living-parchment::before {
+    background: radial-gradient(
+        ellipse at var(--torch-position-x, 20%) var(--torch-position-y, 30%), 
+        rgba(255, 180, 50, 0.15),
+        rgba(255, 150, 20, 0.05) 40%,
+        transparent 70%
+    );
+    mix-blend-mode: screen;
+}
+
+.dark-mode .living-mosaic::before {
+    mix-blend-mode: screen;
+    opacity: 0.08;
+}
+
+/* =============================================
+   SECTION-SPECIFIC ADAPTATIONS
+   ============================================= */
+
+/* Hero Section */
+.hero-section.living-marble::before {
+    animation-duration: 40s;
+    opacity: 0.08;
+    background: 
+        linear-gradient(
+            110deg,
+            rgba(218, 165, 32, 0) 20%,
+            rgba(218, 165, 32, 0.05) 35%,
+            rgba(255, 255, 255, 0.05) 50%,
+            rgba(218, 165, 32, 0.05) 65%,
+            rgba(218, 165, 32, 0) 80%
+        );
+}
+
+/* Skills Section */
+.skills-section.living-mosaic::before {
+    animation-duration: 25s;
+    opacity: 0.15;
+}
+
+/* =============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================= */
+
+.living-marble,
+.living-parchment,
+.living-mosaic {
+    will-change: opacity, transform;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .living-marble::before,
+    .living-parchment::before,
+    .living-mosaic::before,
+    .living-marble::after,
+    .living-parchment::after,
+    .living-mosaic::after {
+        animation: none !important;
+        opacity: 0.05 !important;
+    }
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    .amphora-body { fill: #D2A76B; stroke: #6C571B; stroke-width: 1.5; }
+    .amphora-neck { fill: #D2A76B; stroke: #6C571B; stroke-width: 1.5; }
+    .amphora-rim { fill: #BF9850; stroke: #6C571B; stroke-width: 1.5; }
+    .amphora-handle { fill: none; stroke: #6C571B; stroke-width: 1.5; }
+    .amphora-decoration { fill: none; stroke: #8B6B35; stroke-width: 1; }
+  </style>
+  <g>
+    <!-- Amphora body -->
+    <path class="amphora-body" d="M40,35 C25,55 25,75 50,85 C75,75 75,55 60,35 Z"/>
+    
+    <!-- Amphora neck -->
+    <path class="amphora-neck" d="M40,35 C40,25 60,25 60,35"/>
+    
+    <!-- Amphora rim -->
+    <ellipse class="amphora-rim" cx="50" cy="25" rx="10" ry="3"/>
+    
+    <!-- Handles -->
+    <path class="amphora-handle" d="M40,35 C30,40 30,50 40,55"/>
+    <path class="amphora-handle" d="M60,35 C70,40 70,50 60,55"/>
+    
+    <!-- Decorative patterns -->
+    <path class="amphora-decoration" d="M35,45 C45,48 55,48 65,45"/>
+    <path class="amphora-decoration" d="M30,65 C45,70 55,70 70,65"/>
+    
+    <!-- Greek key pattern simplified -->
+    <path class="amphora-decoration" d="M45,55 L55,55 M45,55 L45,58 L50,58 M50,58 L50,55 M55,55 L55,58"/>
+  </g>
+</svg>

@@ -1,0 +1,467 @@
+/**
+ * Cursus Honorum Timeline Component
+ * Styles for the interactive horizontal timeline resembling a Roman road/aqueduct
+ * Version: 1.0
+ */
+
+/* Main wrapper */
+.cursus-honorum-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 3rem 0;
+    padding: 1rem 0;
+}
+
+/* Scroll container */
+.cursus-honorum-scroller {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 2rem 0 4rem;
+    position: relative;
+    scroll-snap-type: x mandatory;
+}
+
+/* Hide scrollbar but keep functionality */
+.cursus-honorum-scroller {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.cursus-honorum-scroller::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Timeline track - the "road" or "aqueduct" visualization */
+.cursus-honorum-track {
+    position: absolute;
+    height: 25px;
+    background: 
+        linear-gradient(
+            to bottom,
+            var(--color-stone-dark) 0%,
+            var(--color-stone) 20%,
+            var(--color-stone-light) 50%,
+            var(--color-stone) 80%,
+            var(--color-stone-dark) 100%
+        ),
+        repeating-linear-gradient(
+            90deg,
+            var(--color-stone-dark) 0px,
+            var(--color-stone) 5px,
+            var(--color-stone-light) 10px,
+            var(--color-stone) 15px,
+            var(--color-stone-dark) 20px
+        );
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Columns - create "aqueduct" appearance */
+.cursus-column {
+    position: absolute;
+    width: 10px;
+    background: var(--color-stone-light);
+    top: 50%;
+    bottom: -20px;
+    transform: translateY(-50%);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+
+.cursus-column::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 8px;
+    background: var(--color-stone);
+    top: 0;
+    left: -5px;
+    border-radius: 2px;
+}
+
+.cursus-column::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 6px;
+    background: var(--color-stone-dark);
+    bottom: 0;
+    left: -3px;
+    border-radius: 2px;
+}
+
+.left-column {
+    left: 50px;
+}
+
+.right-column {
+    right: 50px;
+}
+
+/* Timeline container with milestones */
+.cursus-honorum-timeline {
+    display: flex;
+    min-width: max-content;
+    position: relative;
+    z-index: 2;
+    padding: 0 100px;
+}
+
+/* Individual milestone styling */
+.timeline-milestone {
+    flex: 0 0 300px;
+    margin: 0 50px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    scroll-snap-align: center;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.timeline-milestone:first-child {
+    margin-left: 120px;
+}
+
+.timeline-milestone:last-child {
+    margin-right: 120px;
+}
+
+/* Milestone marker (column) */
+.milestone-marker {
+    position: relative;
+    width: 40px;
+    height: 120px;
+    margin: 0 auto 1rem;
+    z-index: 2;
+}
+
+.marker-plinth {
+    position: absolute;
+    bottom: 0;
+    width: 60px;
+    height: 15px;
+    background: var(--color-stone);
+    left: -10px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.marker-pillar {
+    position: absolute;
+    bottom: 15px;
+    width: 40px;
+    height: 70px;
+    background: linear-gradient(
+        to right,
+        var(--color-stone-dark) 0%,
+        var(--color-stone-light) 30%,
+        var(--color-stone) 70%, 
+        var(--color-stone-dark) 100%
+    );
+    left: 0;
+}
+
+.marker-top {
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 12px;
+    background: var(--color-stone);
+    left: -5px;
+    border-radius: 2px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Roman numeral year */
+.milestone-year {
+    position: absolute;
+    font-family: var(--font-title);
+    font-weight: 700;
+    color: var(--color-gold-dark);
+    font-size: 1rem;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Milestone content */
+.milestone-content {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    max-width: 300px;
+}
+
+.milestone-content::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid var(--color-border);
+}
+
+.milestone-content::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--color-bg-alt);
+}
+
+/* Milestone header */
+.milestone-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.75rem;
+}
+
+.milestone-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-headings);
+}
+
+.milestone-company {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.milestone-date {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Milestone details with expandable content */
+.milestone-details {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+}
+
+/* Milestone skills */
+.milestone-skills {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.milestone-description {
+    line-height: 1.5;
+}
+
+.milestone-skills .skill-tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+}
+
+/* Expanded state */
+.timeline-milestone.expanded .milestone-details {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 1rem;
+}
+
+.timeline-milestone.expanded .milestone-content {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-gold-muted);
+}
+
+.timeline-milestone.expanded .marker-pillar {
+    background: linear-gradient(
+        to right,
+        var(--color-gold-dark) 0%,
+        var(--color-gold-light) 30%,
+        var(--color-gold) 70%,
+        var(--color-gold-dark) 100%
+    );
+}
+
+.timeline-milestone.expanded .marker-top,
+.timeline-milestone.expanded .marker-plinth {
+    background: var(--color-gold);
+}
+
+/* Hover state */
+.timeline-milestone:hover,
+.timeline-milestone:focus {
+    outline: none;
+    transform: translateY(-5px);
+}
+
+.timeline-milestone:hover .milestone-year,
+.timeline-milestone:focus .milestone-year {
+    color: var(--color-gold);
+}
+
+/* Arrow indicators to show scrollability */
+.timeline-scroll-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.timeline-scroll-indicator:hover,
+.timeline-scroll-indicator:focus {
+    background: var(--color-gold-light);
+    color: var(--color-gold-dark);
+    border-color: var(--color-gold);
+}
+
+.timeline-scroll-indicator.left {
+    left: 10px;
+}
+
+.timeline-scroll-indicator.right {
+    right: 10px;
+}
+
+/* Entry animations */
+.timeline-milestone {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.timeline-milestone.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dark mode adjustments */
+.dark-mode .cursus-honorum-track {
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+    background: 
+        linear-gradient(
+            to bottom,
+            var(--color-stone-dark) 0%,
+            var(--color-stone) 25%,
+            var(--color-stone-light) 50%,
+            var(--color-stone) 75%,
+            var(--color-stone-dark) 100%
+        ),
+        repeating-linear-gradient(
+            90deg,
+            rgba(70, 60, 50, 0.8) 0px,
+            rgba(80, 70, 60, 0.8) 5px,
+            rgba(90, 80, 70, 0.8) 10px,
+            rgba(80, 70, 60, 0.8) 15px,
+            rgba(70, 60, 50, 0.8) 20px
+        );
+}
+
+.dark-mode .milestone-marker {
+    filter: brightness(0.85);
+}
+
+.dark-mode .milestone-year {
+    filter: brightness(1.2);
+}
+
+.dark-mode .timeline-milestone.expanded .marker-pillar {
+    filter: brightness(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .timeline-milestone {
+        flex: 0 0 250px;
+        margin: 0 30px;
+    }
+    
+    .milestone-content {
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .cursus-honorum-wrapper {
+        margin: 1.5rem 0;
+    }
+    
+    .timeline-milestone {
+        flex: 0 0 220px;
+        margin: 0 20px;
+    }
+    
+    .milestone-content {
+        max-width: 220px;
+        padding: 1rem;
+    }
+    
+    .milestone-marker {
+        height: 100px;
+    }
+    
+    .marker-pillar {
+        height: 55px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cursus-honorum-wrapper {
+        margin: 1rem 0;
+    }
+    
+    .timeline-milestone {
+        flex: 0 0 200px;
+        margin: 0 15px;
+    }
+    
+    .milestone-content {
+        max-width: 200px;
+        padding: 0.75rem;
+    }
+    
+    .milestone-marker {
+        height: 80px;
+        width: 30px;
+    }
+    
+    .marker-pillar {
+        height: 45px;
+        width: 30px;
+    }
+    
+    .marker-top, .marker-plinth {
+        width: 40px;
+        left: -5px;
+    }
+}

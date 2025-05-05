@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    .lamp-body { fill: #BF9850; stroke: #6C571B; stroke-width: 1.5; }
+    .lamp-base { fill: #BF9850; stroke: #6C571B; stroke-width: 1.5; }
+    .lamp-flame { fill: #FFD868; }
+    .lamp-flame-inner { fill: #FF9D00; }
+    .lamp-handle { fill: none; stroke: #6C571B; stroke-width: 1.5; }
+  </style>
+  <g>
+    <!-- Lamp base -->
+    <ellipse class="lamp-base" cx="50" cy="82" rx="20" ry="5"/>
+    
+    <!-- Lamp body -->
+    <path class="lamp-body" d="M35,40 C35,25 65,25 65,40 L65,80 C65,81.5 62,83 50,83 C38,83 35,81.5 35,80 Z"/>
+    
+    <!-- Lamp top opening -->
+    <ellipse class="lamp-body" cx="50" cy="40" rx="15" ry="5"/>
+    
+    <!-- Flame -->
+    <path class="lamp-flame" d="M50,20 C53,25 56,30 53,35 C49,31 47,27 50,20 Z"/>
+    <path class="lamp-flame-inner" d="M50,23 C51.5,26 53,29 51.5,32 C49.5,30 48.5,27 50,23 Z"/>
+    
+    <!-- Handle -->
+    <path class="lamp-handle" d="M65,50 C75,50 75,65 65,65"/>
+  </g>
+</svg>

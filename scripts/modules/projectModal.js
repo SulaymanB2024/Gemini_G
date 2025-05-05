@@ -1,428 +1,922 @@
 /**
- * projectModal.js
- * Manages the project modal functionality including opening, closing and populating.
+ * Project Modal Module
+ * Handles the display and interaction with project detail modals
+ * Version: 3.2 - Enhanced with Roman-themed styling, dynamic lighting, and improved code viewer
  */
 
-/**
- * Initializes and manages the project modal for showcasing detailed project information.
- * Handles opening, closing, and populating the modal with project data.
- */
-export default function initProjectModal() {
-    const modal = document.getElementById('project-modal');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
-    const projectBtns = document.querySelectorAll('.view-project-btn'); // Buttons on project cards
-    const modalContent = modal ? modal.querySelector('.modal-content') : null; // Inner content area
-    const modalNav = document.createElement('div');
-    let currentProjectId = null;
-    let projectIds = [];
+export default class ProjectModal {
+  constructor() {
+    this.currentProject = null;
+    this.modalOverlay = null;
+    this.modalContent = null;
+    this.activeCategory = 'All';
+    this.animationInProgress = false;
+    this.viewMode = 'grid'; // grid or timeline
+    this.lightSource = { x: 0, y: -30 }; // Default light source position
 
-    // Exit if essential modal elements are missing
-    if (!modal || !modalCloseBtn || !modalContent) {
-        console.warn('Project modal elements not found. Feature disabled.');
-        return;
-    }
-
-    // --- Project Data ---
-    // Store project details here. In a real application, this might come from an API.
-    const projectData = {
-        'imc': { // Matches data-project-id="imc"
-            title: 'Systematic Trading Framework',
-            subtitle: 'Quantitative Strategy Development',
-            date: 'Spring 2025',
-            objective: 'Build an algorithmic trading system for competitive market simulation that optimizes for risk-adjusted returns while maintaining market-making obligations.',
-            approach: 'Developed a statistical model to estimate fair value based on order book imbalance and recent trade history. Implemented dynamic hedging and inventory management logic with adaptive risk limits.',
-            tech: 'Python, NumPy, Pandas, Scikit-learn, Statistical Analysis',
-            results: 'Achieved top 15% placement globally with Sharpe ratio of 2.3. Successfully managed risk through high volatility scenarios while maintaining consistent profitability.',
-            codeLang: 'python', // Specify language for Prism.js
-            code: `import numpy as np
+    this.projectData = {
+      imc: {
+        title: "Systematic Trading Framework",
+        description: `A comprehensive trading framework built with Python for algorithmic trading strategies. 
+        This framework includes advanced technical indicator generation, backtesting capabilities, and strategy optimization.`,
+        details: [
+          "Implemented multiple trading strategies using statistical analysis and technical indicators",
+          "Created a backtesting engine to evaluate strategy performance across different market conditions",
+          "Designed a risk management module to optimize position sizing and limit downside exposure"
+        ],
+        technologies: ["Python", "Pandas", "NumPy", "Matplotlib", "Statistical Analysis"],
+        links: [{
+          text: "GitHub Repository",
+          url: "https://github.com/SulaymanB2024/IMC_BOT"
+        }],
+        year: "2024",
+        romanYear: "MMXXIV",
+        codeSample: {
+          title: 'Trading Strategy Implementation',
+          language: 'python',
+          code: `# Systematic Trading Strategy Implementation
 import pandas as pd
+import numpy as np
+from backtesting import Strategy
 
-class MarketMaker:
-    def __init__(self, risk_limit=100, edge_factor=0.2):
-        self.position = 0
-        self.cash = 10000
-        self.risk_limit = risk_limit
-        self.edge_factor = edge_factor
-        self.trades = []
-        self.market_data = []
-        self.fair_value = None
-        self.last_trade_time = None
-
-    def update_fair_value(self, order_book):
-        # Simplified fair value calculation
-        if not order_book or not order_book.get('bids') or not order_book.get('asks'):
-             return None # Handle empty or invalid order book
-        best_bid = order_book['bids'][0]['price']
-        best_ask = order_book['asks'][0]['price']
-        mid_price = (best_bid + best_ask) / 2
-        # Placeholder for imbalance calculation
-        imbalance = 0 # Replace with actual calculation if data available
-        self.fair_value = mid_price * (1 + imbalance * self.edge_factor)
-        return self.fair_value
-    def place_order(self, order_type, size):
-        if abs(self.position) + size > self.risk_limit:
-            print("Order exceeds risk limit.")
-            return None
-        if order_type == 'buy':
-            self.position += size
-            self.cash -= size * self.fair_value
-        elif order_type == 'sell':
-            self.position -= size
-            self.cash += size * self.fair_value
-        else:
-            print("Invalid order type.")
-            return None
-        self.trades.append({'type': order_type, 'size': size, 'price': self.fair_value})
-        self.last_trade_time = pd.Timestamp.now()
-        return {'type': order_type, 'size': size, 'price': self.fair_value}`,
-            links: [ // Array of link objects
-                { text: 'GitHub Repository', url: '#', icon: 'fab fa-github' },
-                { text: 'Research Paper', url: '#', icon: 'fas fa-file-alt' }
-            ]
-        },
-        'messari': { // Matches data-project-id="messari"
-            title: 'Stablecoin Analytics Dashboard',
-            subtitle: 'Blockchain Data Analysis (Messari Research)',
-            date: 'Spring 2025',
-            objective: 'Create a real-time monitoring system for major stablecoins that tracks key metrics such as market cap, collateralization ratio, and on-chain activity.',
-            approach: 'Built data pipelines to collect on-chain data from multiple blockchains (Ethereum, Solana, Arbitrum). Implemented statistical models to detect anomalies and potential de-pegging events.',
-            tech: 'Python, Web3.py, SQL, Dash/Plotly, Ethereum, Solana, Arbitrum',
-            results: 'Dashboard provided critical real-time insights during market turbulence, detecting early warning signs of stablecoin stress. Research findings were published in Messari Pro Research reports.',
-            codeLang: 'python',
-            code: `import pandas as pd
-import plotly.express as px
-from dash import Dash, dcc, html # Assuming Dash for dashboard
-# Placeholder for Web3 connection setup
-# from web3 import Web3
+class AdaptiveMomentumStrategy(Strategy):
+    """An adaptive momentum strategy that dynamically adjusts parameters
+    based on recent market volatility."""
+    
+    def init(self):
+        # Parameters
+        self.n1 = 10  # Fast moving average period
+        self.n2 = 21  # Slow moving average period
+        self.volatility_window = 63  # Window for volatility calculation
+        
+        # Calculate moving averages
+        self.fast_ma = self.I(lambda: self.data.Close.ewm(span=self.n1).mean())
+        self.slow_ma = self.I(lambda: self.data.Close.ewm(span=self.n2).mean())
+        
+        # Calculate dynamic volatility
+        self.volatility = self.I(lambda: self.data.Close.pct_change().rolling(self.volatility_window).std())
+    
+    def next(self):
+        # Adjust position size based on inverse of recent volatility
+        risk_adjustment = 0.1 / self.volatility[-1] if self.volatility[-1] > 0 else 1
+        risk_adjustment = min(risk_adjustment, 1.0)  # Cap the position size
+        
+        # Trading logic - buy when fast MA crosses above slow MA
+        if self.fast_ma[-1] > self.slow_ma[-1] and self.fast_ma[-2] <= self.slow_ma[-2]:
+            self.buy(size=risk_adjustment)
+        
+        # Sell when fast MA crosses below slow MA
+        elif self.fast_ma[-1] < self.slow_ma[-1] and self.fast_ma[-2] >= self.slow_ma[-2]:
+            self.position.close()`
+        }
+      },
+      messari: {
+        title: "Stablecoin Analytics Dashboard",
+        description: `Real-time monitoring system for stablecoin market metrics. This dashboard tracks key performance 
+        indicators and market conditions for major stablecoins across various blockchain networks.`,
+        details: [
+          "Developed data pipelines to aggregate on-chain and market data from multiple sources",
+          "Created interactive visualizations to track stablecoin performance metrics over time",
+          "Implemented alert systems for detecting market anomalies and potential depeg events"
+        ],
+        technologies: ["Python", "Web3", "SQL", "Tableau", "Data Analysis"],
+        links: [],
+        year: "2023",
+        romanYear: "MMXXIII",
+        codeSample: {
+          title: 'Stablecoin Monitoring',
+          language: 'python',
+          code: `# Stablecoin Analytics Dashboard - Market Data Monitor
+from web3 import Web3
+import pandas as pd
+import plotly.graph_objects as go
 
 class StablecoinMonitor:
-    def __init__(self, config):
-        self.config = config
-        # self.web3_connections = {chain: Web3(Web3.HTTPProvider(endpoint))
-        #                          for chain, endpoint in config['rpc_endpoints'].items()}
-        print("Monitor Initialized (Web3 connection placeholder)")`,
-            links: [
-                { text: 'Interactive Dashboard', url: '#', icon: 'fas fa-chart-line' },
-                { text: 'Research Report (Messari)', url: '#', icon: 'fas fa-file-pdf' }
-            ]
-        },
-        'point72': {
-            title: 'Restaurant Industry Analysis',
-            subtitle: 'Investment Pitch Case Study',
-            date: 'Fall 2024',
-            objective: 'Develop a comprehensive investment thesis on a publicly-traded restaurant chain, including detailed financial modeling and industry analysis.',
-            approach: 'Created a 5-year DCF model with detailed revenue projections by location type and sensitivity analysis. Performed competitive analysis of margin structures across the industry and examined impact of inflation on cost structure.',
-            tech: 'Excel, Financial Modeling, DCF Analysis, Comparable Company Analysis, Industry Research',
-            results: 'Identified 27% downside potential in target company due to margin compression and slowing unit growth. Presentation received excellent feedback from investment professionals.',
-            codeLang: 'plaintext',
-            code: `// Financial Model Structure (Excel Logic Example)
-
-// Revenue Forecast = Sum(Locations[Type] * Avg_Revenue_Per_Location[Type])
-Revenue_Year[t] = Σ (Locations[t][i] * Avg_Revenue[t][i])
-// Location Types: Urban, Suburban, Rural`,
-            links: [
-                { text: 'Financial Model (Excel)', url: '#', icon: 'fas fa-file-excel' },
-                { text: 'Presentation Deck', url: '#', icon: 'fas fa-file-powerpoint' }
-            ]
+    def __init__(self, stablecoin_address, blockchain="ethereum"):
+        self.address = stablecoin_address
+        self.blockchain = blockchain
+        self.w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_INFURA_KEY'))
+        self.historical_data = pd.DataFrame()
+        self.alert_thresholds = {
+            'price_deviation': 0.015,  # Alert if price deviates 1.5% from peg
+            'daily_volume_increase': 0.35,  # Alert if volume increases by 35%
+            'large_transfer': 1000000  # Alert on transfers over $1M
         }
+    
+    def fetch_on_chain_metrics(self):
+        """Fetch on-chain metrics like total supply, holder count, etc."""
+        # Contract ABI simplified for example
+        abi = [{"constant": True, "inputs": [], "name": "totalSupply", "outputs": [{"name": "", "type": "uint256"}]}]
+        contract = self.w3.eth.contract(address=self.w3.toChecksumAddress(self.address), abi=abi)
+        
+        # Get total supply
+        total_supply = contract.functions.totalSupply().call() / 10**6  # Assuming 6 decimals
+        
+        return {
+            'total_supply': total_supply,
+            'blockchain': self.blockchain,
+            'timestamp': pd.Timestamp.now()
+        }
+    
+    def detect_depegging_events(self, price_data):
+        """Analyze price data to detect potential depegging events"""
+        # Calculate moving average and volatility
+        price_data['ma7d'] = price_data['price'].rolling(7).mean()
+        price_data['volatility'] = price_data['price'].rolling(14).std()
+        
+        # Detect potential depeg events
+        price_data['depeg_alert'] = abs(price_data['price'] - 1.0) > self.alert_thresholds['price_deviation']
+        
+        # Calculate severity of depegging
+        depeg_events = price_data[price_data['depeg_alert']]
+        
+        return depeg_events`
+        }
+      },
+      point72: {
+        title: "Restaurant Industry Analysis",
+        description: `Comprehensive financial modeling and industry analysis focused on the restaurant sector. 
+        This project includes detailed valuation models, competitive analysis, and market trend forecasting.`,
+        details: [
+          "Conducted valuation analysis using multiple methodologies (DCF, Comps, LBO)",
+          "Performed ZIP-code level competitive analysis to identify market opportunities",
+          "Developed scenario models to project performance under varying economic conditions"
+        ],
+        technologies: ["Excel", "Financial Modeling", "Industry Research", "Valuation"],
+        links: [{
+          text: "Download PDF",
+          url: "Arav Chheda_Jireh Capital Management_Point72 Case Study.pdf",
+          download: true
+        }],
+        year: "2023",
+        romanYear: "MMXXIII"
+      },
+      blockchain: {
+        title: "Cryptocurrency Research",
+        description: `In-depth research and analysis of cryptocurrency markets and blockchain technology. 
+        This project includes protocol evaluations, tokenomics analysis, and investment recommendations.`,
+        details: [
+          "Analyzed token economic models and incentive structures of leading blockchain protocols",
+          "Evaluated technical architecture and scalability solutions across different networks",
+          "Forecasted adoption trends and market opportunities in the cryptocurrency ecosystem"
+        ],
+        technologies: ["Blockchain", "Tokenomics", "Financial Analysis", "Market Research"],
+        links: [],
+        year: "2022",
+        romanYear: "MMXXII"
+      },
+      energy: {
+        title: "Energy Markets Analysis",
+        description: `Comprehensive analysis of energy commodity markets with a focus on trading opportunities. 
+        This project includes price forecasting models, seasonal trend analysis, and market inefficiency identification.`,
+        details: [
+          "Developed models to predict natural gas and electricity price movements",
+          "Analyzed seasonal patterns in energy consumption and production",
+          "Identified market inefficiencies and arbitrage opportunities across regional energy markets"
+        ],
+        technologies: ["Python", "Statistical Analysis", "Market Research", "Forecasting"],
+        links: [{
+          text: "View on GitHub",
+          url: "https://github.com/SulaymanB2024/UTexas_Coal",
+          external: true
+        }],
+        year: "2022",
+        romanYear: "MMXXII"
+      }
     };
 
-    // Collect all project IDs for navigation
-    projectBtns.forEach(btn => {
-        const projectId = btn.getAttribute('data-project-id');
-        if (projectId) projectIds.push(projectId);
-    });
-
-    // Function to add loading state to modal
-    const setLoadingState = (isLoading) => {
-        if (isLoading) {
-            modalContent.classList.add('is-loading');
-            const loadingIndicator = document.createElement('div');
-            loadingIndicator.className = 'loading-spinner';
-            loadingIndicator.innerHTML = '<div class="spinner"></div>';
-            modalContent.appendChild(loadingIndicator);
-        } else {
-            modalContent.classList.remove('is-loading');
-            const loadingIndicator = modalContent.querySelector('.loading-spinner');
-            if (loadingIndicator) loadingIndicator.remove();
-        }
-    };
-
-    // Function to navigate to next or previous project
-    const navigateProject = (direction) => {
-        if (!currentProjectId || projectIds.length <= 1) return;
-        
-        const currentIndex = projectIds.indexOf(currentProjectId);
-        let newIndex;
-        
-        if (direction === 'next') {
-            newIndex = (currentIndex + 1) % projectIds.length;
-        } else {
-            newIndex = (currentIndex - 1 + projectIds.length) % projectIds.length;
-        }
-        
-        const newProjectId = projectIds[newIndex];
-        openModal(newProjectId);
-        
-        // Update active button state
-        document.querySelectorAll('.view-project-btn.active').forEach(btn => {
-            btn.classList.remove('active');
+    this.categories = ['All'];
+    Object.values(this.projectData).forEach(project => {
+      if (project.technologies) {
+        project.technologies.forEach(tech => {
+          const category = this.getCategoryFromTech(tech);
+          if (!this.categories.includes(category)) {
+            this.categories.push(category);
+          }
         });
-        const newActiveBtn = document.querySelector(`.view-project-btn[data-project-id="${newProjectId}"]`);
-        if (newActiveBtn) newActiveBtn.classList.add('active');
+      }
+    });
+
+    this.codeViewerShowLineNumbers = true;
+
+    this.init();
+  }
+
+  getCategoryFromTech(tech) {
+    const techCategories = {
+      'Python': 'Programming',
+      'Pandas': 'Data Science',
+      'NumPy': 'Data Science',
+      'Matplotlib': 'Data Science',
+      'Statistical Analysis': 'Data Science',
+      'Web3': 'Blockchain',
+      'SQL': 'Database',
+      'Tableau': 'Data Science',
+      'Data Analysis': 'Data Science',
+      'Excel': 'Finance',
+      'Financial Modeling': 'Finance',
+      'Industry Research': 'Research',
+      'Valuation': 'Finance',
+      'Blockchain': 'Blockchain',
+      'Tokenomics': 'Blockchain',
+      'Financial Analysis': 'Finance',
+      'Market Research': 'Research',
+      'Forecasting': 'Data Science'
     };
 
-    // Function to populate and open the modal
-    const openModal = (projectId) => {
-        const data = projectData[projectId];
-        currentProjectId = projectId;
+    return techCategories[tech] || 'Other';
+  }
+
+  getCategoryIcon(category) {
+    const iconMap = {
+      'Programming': 'programming-icon',
+      'Data Science': 'programming-icon',
+      'Database': 'programming-icon',
+      'Blockchain': 'blockchain-icon',
+      'Finance': 'finance-icon',
+      'Research': 'research-icon',
+      'Other': 'programming-icon'
+    };
+
+    return iconMap[category] || 'programming-icon';
+  }
+
+  init() {
+    this.createModalElements();
+    this.createFilterButtons();
+    this.createViewModeToggle();
+    this.bindEvents();
+    this.enhanceProjectCards();
+    this.setupDynamicLighting();
+  }
+
+  createModalElements() {
+    if (!document.getElementById('project-modal-overlay')) {
+      this.modalOverlay = document.createElement('div');
+      this.modalOverlay.id = 'project-modal-overlay';
+      this.modalOverlay.className = 'project-modal-overlay';
+
+      this.modalContent = document.createElement('div');
+      this.modalContent.className = 'project-modal-content';
+
+      const closeButton = document.createElement('button');
+      closeButton.className = 'project-modal-close';
+      closeButton.innerHTML = '&times;';
+      closeButton.setAttribute('aria-label', 'Close project details');
+
+      this.modalContent.appendChild(closeButton);
+      this.modalOverlay.appendChild(this.modalContent);
+      document.body.appendChild(this.modalOverlay);
+    } else {
+      this.modalOverlay = document.getElementById('project-modal-overlay');
+      this.modalContent = this.modalOverlay.querySelector('.project-modal-content');
+    }
+
+    if (this.modalContent && !this.modalContent.querySelector('.roman-decorative-elements')) {
+      const decorativeElements = document.createElement('div');
+      decorativeElements.className = 'roman-decorative-elements';
+      decorativeElements.innerHTML = `
+        <div class="laurel-left"></div>
+        <div class="laurel-right"></div>
+        <div class="roman-border-top"></div>
+        <div class="roman-border-bottom"></div>
+        <div class="column-pillar left"></div>
+        <div class="column-pillar right"></div>
+        <div class="mosaic-corner top-left"></div>
+        <div class="mosaic-corner top-right"></div>
+        <div class="mosaic-corner bottom-left"></div>
+        <div class="mosaic-corner bottom-right"></div>
+      `;
+      this.modalContent.appendChild(decorativeElements);
+    }
+  }
+
+  createFilterButtons() {
+    const projectsSection = document.querySelector('.projects-section');
+    if (!projectsSection) return;
+
+    const existingFilters = document.querySelector('.project-filter-container');
+    if (existingFilters) existingFilters.remove();
+
+    const filterContainer = document.createElement('div');
+    filterContainer.className = 'project-filter-container';
+
+    const filterHeader = document.createElement('div');
+    filterHeader.className = 'filter-header';
+    filterHeader.innerHTML = `
+      <div class="laurel-small left"></div>
+      <h3>Browse by Expertise</h3>
+      <div class="laurel-small right"></div>
+    `;
+    filterContainer.appendChild(filterHeader);
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'filter-buttons';
+
+    this.categories.sort().forEach(category => {
+      const button = document.createElement('button');
+      button.className = 'filter-button';
+      if (category === 'All') button.classList.add('active');
+
+      button.dataset.category = category;
+
+      const iconClass = category !== 'All' ? this.getCategoryIcon(category) : '';
+      button.innerHTML = `
+        ${iconClass ? `<span class="project-icon ${iconClass}"></span>` : ''}
+        <span class="filter-text">${category}</span>
+        <div class="button-decoration"></div>
+      `;
+
+      button.addEventListener('click', () => this.filterProjects(category));
+      buttonContainer.appendChild(button);
+
+      this.addDynamicLightingToElement(button);
+    });
+
+    filterContainer.appendChild(buttonContainer);
+
+    const projectsGrid = document.querySelector('.projects-grid');
+    if (projectsGrid) {
+      projectsSection.insertBefore(filterContainer, projectsGrid);
+    }
+  }
+
+  createViewModeToggle() {
+    const projectsSection = document.querySelector('.projects-section');
+    if (!projectsSection) return;
+
+    const existingToggle = document.querySelector('.view-mode-toggle');
+    if (existingToggle) existingToggle.remove();
+
+    const toggleContainer = document.createElement('div');
+    toggleContainer.className = 'view-mode-toggle';
+    
+    toggleContainer.innerHTML = `
+      <div class="toggle-header">
+        <div class="toggle-icon left"><i class="fas fa-th"></i></div>
+        <h4>View Mode</h4>
+        <div class="toggle-icon right"><i class="fas fa-stream"></i></div>
+      </div>
+      <div class="toggle-switch">
+        <button class="mode-button active" data-mode="grid">
+          <i class="fas fa-th"></i> Grid
+          <div class="toggle-decoration"></div>
+        </button>
+        <button class="mode-button" data-mode="timeline">
+          <i class="fas fa-stream"></i> Timeline
+          <div class="toggle-decoration"></div>
+        </button>
+      </div>
+    `;
+
+    const filterContainer = document.querySelector('.project-filter-container');
+    if (filterContainer) {
+      filterContainer.after(toggleContainer);
+    } else {
+      const projectsGrid = document.querySelector('.projects-grid');
+      if (projectsGrid) {
+        projectsSection.insertBefore(toggleContainer, projectsGrid);
+      }
+    }
+
+    const gridButton = toggleContainer.querySelector('[data-mode="grid"]');
+    const timelineButton = toggleContainer.querySelector('[data-mode="timeline"]');
+
+    gridButton.addEventListener('click', () => this.changeViewMode('grid'));
+    timelineButton.addEventListener('click', () => this.changeViewMode('timeline'));
+  }
+
+  changeViewMode(mode) {
+    if (this.viewMode === mode || this.animationInProgress) return;
+    this.animationInProgress = true;
+    this.viewMode = mode;
+
+    document.querySelectorAll('.mode-button').forEach(button => {
+      button.classList.toggle('active', button.dataset.mode === mode);
+    });
+
+    const projectsGrid = document.querySelector('.projects-grid');
+    if (!projectsGrid) {
+      this.animationInProgress = false;
+      return;
+    }
+
+    projectsGrid.classList.add('fade-out');
+
+    setTimeout(() => {
+      projectsGrid.classList.remove('grid-view', 'timeline-view');
+      projectsGrid.classList.add(`${mode}-view`);
+      
+      const projectCards = projectsGrid.querySelectorAll('.project-card');
+      projectCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.remove('grid-card', 'timeline-card');
+        card.classList.add(`${mode}-card`);
         
-        if (!data) {
-            console.error(`Project data not found for ID: ${projectId}`);
-            return;
+        if (mode === 'timeline') {
+          const projectId = card.querySelector('[data-project-id]')?.getAttribute('data-project-id');
+          if (projectId && !card.querySelector('.year-marker') && this.projectData[projectId]) {
+            const yearMarker = document.createElement('div');
+            yearMarker.className = 'year-marker';
+            yearMarker.innerHTML = `
+              <span class="year">${this.projectData[projectId].year}</span>
+              <span class="roman-year">${this.projectData[projectId].romanYear}</span>
+              <div class="timeline-node"></div>
+            `;
+            card.prepend(yearMarker);
+          }
         }
-        
-        // Show loading state
-        setLoadingState(true);
-        
-        // Simulate network delay (remove in production)
+      });
+
+      projectsGrid.classList.remove('fade-out');
+      projectsGrid.classList.add('fade-in');
+
+      setTimeout(() => {
+        projectsGrid.classList.remove('fade-in');
+        this.animationInProgress = false;
+      }, 500);
+    }, 300);
+  }
+
+  enhanceProjectCards() {
+    const projectCards = document.querySelectorAll('.project-card');
+
+    projectCards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.1}s`;
+
+      if (!card.querySelector('.card-decoration')) {
+        const decoration = document.createElement('div');
+        decoration.className = 'card-decoration';
+        card.appendChild(decoration);
+      }
+
+      if (!card.querySelector('.card-mosaic')) {
+        const mosaic = document.createElement('div');
+        mosaic.className = 'card-mosaic';
+        card.appendChild(mosaic);
+      }
+
+      const projectId = card.querySelector('[data-project-id]')?.getAttribute('data-project-id');
+      if (projectId && this.projectData[projectId]) {
+        const project = this.projectData[projectId];
+        const categories = new Set();
+
+        if (project.technologies) {
+          project.technologies.forEach(tech => {
+            categories.add(this.getCategoryFromTech(tech));
+          });
+        }
+
+        card.dataset.categories = Array.from(categories).join(' ');
+        card.dataset.year = project.year || '';
+
+        if (!card.querySelector('.card-categories')) {
+          const categoryContainer = document.createElement('div');
+          categoryContainer.className = 'card-categories';
+
+          Array.from(categories).slice(0, 3).forEach(category => {
+            const tag = document.createElement('span');
+            tag.className = 'category-tag';
+            
+            const iconClass = this.getCategoryIcon(category);
+            tag.innerHTML = `
+              <span class="project-icon ${iconClass}"></span>
+              <span>${category}</span>
+            `;
+            categoryContainer.appendChild(tag);
+          });
+
+          card.querySelector('.project-card-content')?.appendChild(categoryContainer);
+        }
+      }
+
+      this.addDynamicLightingToCard(card);
+    });
+  }
+
+  setupDynamicLighting() {
+    document.addEventListener('mousemove', (e) => {
+      if (!this.modalOverlay || !this.modalOverlay.classList.contains('active')) return;
+      
+      const rect = this.modalContent.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      const lightX = ((mouseX / rect.width) * 100) - 50;
+      const lightY = ((mouseY / rect.height) * 100) - 30;
+      
+      this.lightSource = { x: lightX, y: lightY };
+      
+      requestAnimationFrame(() => {
+        this.modalContent.style.setProperty('--modal-light-x', `${lightX}%`);
+        this.modalContent.style.setProperty('--modal-light-y', `${lightY}%`);
+      });
+    });
+  }
+  
+  addDynamicLightingToCard(card) {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const mouseX = (x / rect.width) * 100;
+      const mouseY = (y / rect.height) * 100;
+      
+      card.style.setProperty('--mouse-x', `${mouseX}%`);
+      card.style.setProperty('--mouse-y', `${mouseY}%`);
+    });
+  }
+
+  createCodeViewer(code, language, title) {
+    const codeViewerContainer = document.createElement('div');
+    codeViewerContainer.className = 'code-viewer-container';
+    
+    const codeViewerHeader = document.createElement('div');
+    codeViewerHeader.className = 'code-viewer-header';
+    
+    const codeViewerTitle = document.createElement('div');
+    codeViewerTitle.className = 'code-viewer-title';
+    codeViewerTitle.innerHTML = `
+      <i class="fas fa-code"></i>
+      <span>${title || 'Code Sample'}</span>
+    `;
+    
+    const codeViewerActions = document.createElement('div');
+    codeViewerActions.className = 'code-viewer-actions';
+    
+    const copyButton = document.createElement('button');
+    copyButton.className = 'code-viewer-button copy-btn';
+    copyButton.innerHTML = `<i class="fas fa-copy"></i> Copy`;
+    copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+    copyButton.addEventListener('click', () => {
+      navigator.clipboard.writeText(code).then(() => {
+        copyButton.classList.add('copied');
+        copyButton.innerHTML = `<i class="fas fa-check"></i> Copied`;
         setTimeout(() => {
-            // Populate modal content elements safely
-            const setTitle = (id, text) => { const el = modalContent.querySelector(`#${id}`); if (el) el.textContent = text || ''; };
-            
-            // Set text content for all fields
-            setTitle('modal-title', data.title);
-            setTitle('modal-subtitle', data.subtitle);
-            setTitle('modal-date', data.date);
-            setTitle('modal-objective', data.objective);
-            setTitle('modal-approach', data.approach);
-            setTitle('modal-tech', data.tech);
-            setTitle('modal-results', data.results);
-            
-            // Handle code display with syntax highlighting
-            const codeBlock = modalContent.querySelector('#modal-code-block');
-            if (codeBlock) {
-                codeBlock.textContent = data.code || '';
-                codeBlock.className = `language-${data.codeLang || 'plaintext'}`;
-                
-                // Apply syntax highlighting if Prism is available
-                if (window.Prism) {
-                    Prism.highlightElement(codeBlock);
-                }
-            }
-            
-            // Handle links section
-            const linksContainer = modalContent.querySelector('#modal-links');
-            if (linksContainer) {
-                // Clear existing links
-                linksContainer.innerHTML = '';
-                
-                // Add new links if available
-                if (data.links && data.links.length) {
-                    data.links.forEach(link => {
-                        const linkElement = document.createElement('a');
-                        linkElement.href = link.url;
-                        linkElement.className = 'project-link';
-                        linkElement.target = '_blank';
-                        linkElement.rel = 'noopener noreferrer';
-                        
-                        // Add icon if specified
-                        if (link.icon) {
-                            const icon = document.createElement('i');
-                            icon.className = link.icon;
-                            linkElement.appendChild(icon);
-                        }
-                        
-                        // Add text
-                        const text = document.createTextNode(` ${link.text}`);
-                        linkElement.appendChild(text);
-                        
-                        linksContainer.appendChild(linkElement);
-                    });
-                    
-                    // Add share buttons
-                    const shareSection = document.createElement('div');
-                    shareSection.className = 'share-section';
-                    shareSection.innerHTML = '<h4>Share This Project</h4>';
-                    
-                    const shareButtons = document.createElement('div');
-                    shareButtons.className = 'share-buttons';
-                    
-                    // LinkedIn share
-                    const linkedinBtn = document.createElement('button');
-                    linkedinBtn.className = 'share-btn linkedin';
-                    linkedinBtn.innerHTML = '<i class="fab fa-linkedin"></i>';
-                    linkedinBtn.addEventListener('click', () => {
-                        const url = encodeURIComponent(window.location.href);
-                        const title = encodeURIComponent(data.title);
-                        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`, '_blank');
-                    });
-                    
-                    // Twitter share
-                    const twitterBtn = document.createElement('button');
-                    twitterBtn.className = 'share-btn twitter';
-                    twitterBtn.innerHTML = '<i class="fab fa-twitter"></i>';
-                    twitterBtn.addEventListener('click', () => {
-                        const url = encodeURIComponent(window.location.href);
-                        const text = encodeURIComponent(`Check out this project: ${data.title}`);
-                        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
-                    });
-                    
-                    shareButtons.appendChild(linkedinBtn);
-                    shareButtons.appendChild(twitterBtn);
-                    shareSection.appendChild(shareButtons);
-                    linksContainer.appendChild(shareSection);
-                } else {
-                    // No links available message
-                    linksContainer.innerHTML = '<p>No resources available for this project.</p>';
-                }
-            }
-            
-            // Handle project images with progressive loading
-            const imagesContainer = modalContent.querySelector('#modal-images');
-            if (imagesContainer && data.images) {
-                imagesContainer.innerHTML = '';
-                data.images.forEach(image => {
-                    const imgWrapper = document.createElement('div');
-                    imgWrapper.className = 'modal-image-wrapper';
-                    
-                    const img = new Image();
-                    img.className = 'modal-image loading';
-                    
-                    // Add low-res thumbnail as placeholder
-                    if (image.thumbnail) {
-                        img.style.backgroundImage = `url(${image.thumbnail})`;
-                    }
-                    
-                    // Load high-res image
-                    img.onload = () => {
-                        img.classList.remove('loading');
-                        img.classList.add('loaded');
-                    };
-                    img.src = image.src;
-                    img.alt = image.alt || data.title;
-                    
-                    imgWrapper.appendChild(img);
-                    imagesContainer.appendChild(imgWrapper);
-                });
-            }
-            
-            // Add navigation buttons if there are multiple projects
-            if (projectIds.length > 1) {
-                modalNav.className = 'modal-nav';
-                modalNav.innerHTML = `
-                    <button class="modal-nav-btn prev" aria-label="Previous project">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="modal-nav-btn next" aria-label="Next project">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                `;
-                
-                if (!modalContent.contains(modalNav)) {
-                    modalContent.appendChild(modalNav);
-                }
-                
-                // Add event listeners to navigation buttons
-                const prevBtn = modalNav.querySelector('.prev');
-                const nextBtn = modalNav.querySelector('.next');
-                
-                prevBtn.addEventListener('click', () => navigateProject('prev'));
-                nextBtn.addEventListener('click', () => navigateProject('next'));
-            }
-            
-            // Remove loading state
-            setLoadingState(false);
-            
-            // Apply animation class for entrance effect
-            modal.classList.add('is-active');
-            modalContent.classList.add('animate-in');
-            
-            // Prevent page scrolling when modal is open
-            document.body.style.overflow = 'hidden';
-            
-            // Focus trap for accessibility
-            setTimeout(() => {
-                modalCloseBtn.focus();
-            }, 100);
-        }, 300); // Simulated loading time, remove in production
-    };
-    
-    // Function to close the modal
-    const closeModal = () => {
-        // Apply exit animation
-        modalContent.classList.remove('animate-in');
-        modalContent.classList.add('animate-out');
-        
-        // Allow time for animation to complete before hiding modal
+          copyButton.classList.remove('copied');
+          copyButton.innerHTML = `<i class="fas fa-copy"></i> Copy`;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy code: ', err);
+        copyButton.innerHTML = `<i class="fas fa-times"></i> Error`;
         setTimeout(() => {
-            modal.classList.remove('is-active');
-            modalContent.classList.remove('animate-out');
-            
-            // Re-enable page scrolling
-            document.body.style.overflow = '';
-            
-            // Return focus to the button that opened the modal
-            const activeProjectBtn = document.querySelector('.view-project-btn.active');
-            if (activeProjectBtn) {
-                activeProjectBtn.focus();
-                activeProjectBtn.classList.remove('active');
-            }
-            
-            // Reset current project ID
-            currentProjectId = null;
-        }, 300); // Match this with your CSS transition duration
-    };
-    
-    // Event: Open modal when a project button is clicked
-    projectBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const projectId = btn.getAttribute('data-project-id');
-            
-            // Mark this button as active (for returning focus later)
-            btn.classList.add('active');
-            
-            // Open the modal with this project's data
-            openModal(projectId);
-        });
+          copyButton.innerHTML = `<i class="fas fa-copy"></i> Copy`;
+        }, 2000);
+      });
     });
     
-    // Event: Close modal when close button is clicked
-    modalCloseBtn.addEventListener('click', closeModal);
-    
-    // Event: Close modal when clicking outside content area
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
+    const lineNumbersButton = document.createElement('button');
+    lineNumbersButton.className = 'code-viewer-button line-numbers-btn';
+    lineNumbersButton.innerHTML = this.codeViewerShowLineNumbers ?
+      `<i class="fas fa-list-ol"></i> Hide Lines` :
+      `<i class="fas fa-list-ol"></i> Show Lines`;
+    lineNumbersButton.setAttribute('aria-label', 'Toggle line numbers');
+    lineNumbersButton.addEventListener('click', () => {
+      this.codeViewerShowLineNumbers = !this.codeViewerShowLineNumbers;
+      
+      const codeElement = codeViewerContent.querySelector('pre');
+      if (this.codeViewerShowLineNumbers) {
+        codeElement.classList.add('line-numbers');
+        lineNumbersButton.innerHTML = `<i class="fas fa-list-ol"></i> Hide Lines`;
+      } else {
+        codeElement.classList.remove('line-numbers');
+        lineNumbersButton.innerHTML = `<i class="fas fa-list-ol"></i> Show Lines`;
+      }
     });
     
-    // Event: Close modal on Escape key press and navigate projects with arrow keys
-    document.addEventListener('keydown', (e) => {
-        // Only handle keyboard events when modal is active
-        if (!modal.classList.contains('is-active')) return;
+    codeViewerActions.appendChild(lineNumbersButton);
+    codeViewerActions.appendChild(copyButton);
+    codeViewerHeader.appendChild(codeViewerTitle);
+    codeViewerHeader.appendChild(codeViewerActions);
+    
+    const codeViewerContent = document.createElement('div');
+    codeViewerContent.className = 'code-viewer-content';
+    
+    const pre = document.createElement('pre');
+    pre.className = `language-${language || 'javascript'} ${this.codeViewerShowLineNumbers ? 'line-numbers' : ''}`;
+    
+    const codeElement = document.createElement('code');
+    codeElement.className = `language-${language || 'javascript'}`;
+    codeElement.textContent = code;
+    
+    pre.appendChild(codeElement);
+    codeViewerContent.appendChild(pre);
+    
+    codeViewerContainer.appendChild(codeViewerHeader);
+    codeViewerContainer.appendChild(codeViewerContent);
+    
+    this.addDynamicLightingToElement(codeViewerContainer);
+    
+    if (window.Prism) {
+      window.Prism.highlightElement(codeElement);
+    }
+    
+    return codeViewerContainer;
+  }
+
+  addDynamicLightingToElement(element) {
+    element.addEventListener('mousemove', (e) => {
+      const rect = element.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const mouseX = (x / rect.width) * 100;
+      const mouseY = (y / rect.height) * 100;
+      
+      element.style.setProperty('--mouse-x', `${mouseX}%`);
+      element.style.setProperty('--mouse-y', `${mouseY}%`);
+    });
+  }
+
+  openProject(projectId) {
+    const project = this.projectData[projectId];
+    if (!project) return;
+
+    this.currentProject = projectId;
+
+    if (this.modalContent) {
+      this.modalContent.classList.add('content-transition');
+    }
+
+    this.modalContent.innerHTML = `
+      <button class="project-modal-close" aria-label="Close project details">
+        <span class="close-icon">&times;</span>
+        <span class="close-decoration"></span>
+      </button>
+      
+      <div class="project-modal-header">
+        <div class="roman-numeral">${project.romanYear || 'MMXXIII'}</div>
+        <h2>${project.title}</h2>
+        <div class="header-decoration">
+          <div class="line-left"></div>
+          <div class="roman-symbol"></div>
+          <div class="line-right"></div>
+        </div>
+        <div class="project-modal-tech-tags">
+          ${project.technologies.map(tech => {
+              const category = this.getCategoryFromTech(tech);
+              const iconClass = this.getCategoryIcon(category);
+              return `<span class="tech-tag">
+                <span class="project-icon ${iconClass}"></span>
+                ${tech}
+              </span>`;
+          }).join('')}
+        </div>
+      </div>
+      
+      <div class="project-modal-body">
+        <div class="column-decoration left"></div>
+        <div class="column-decoration right"></div>
         
-        switch (e.key) {
-            case 'Escape':
-                closeModal();
-                break;
-            case 'ArrowRight':
-                navigateProject('next');
-                break;
-            case 'ArrowLeft':
-                navigateProject('prev');
-                break;
-        }
+        <p class="project-description">${project.description}</p>
+        
+        <div class="section-header">
+          <div class="section-decoration"></div>
+          <h3>Key Features</h3>
+          <div class="section-decoration"></div>
+        </div>
+        
+        <ul class="project-details-list">
+          ${project.details.map(detail => `
+            <li>
+              <span class="bullet"></span>
+              <div class="detail-content">${detail}</div>
+            </li>
+          `).join('')}
+        </ul>
+        
+        <div id="code-sample-container"></div>
+        
+        ${project.links.length > 0 ? `
+          <div class="project-links">
+            ${project.links.map(link => `
+              <a href="${link.url}" 
+                 class="project-link-button"
+                 ${link.download ? 'download' : ''}
+                 ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                <span class="link-decoration left"></span>
+                <i class="fas ${link.download ? 'fa-download' : link.external ? 'fa-external-link-alt' : 'fa-link'} link-icon"></i>
+                ${link.text}
+                <span class="link-decoration right"></span>
+              </a>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+      
+      <div class="project-modal-navigation">
+        <button class="nav-button prev-project" aria-label="Previous project">
+          <div class="nav-arrow left"></div>
+          <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <div class="navigation-decoration">
+          <div class="nav-symbol"></div>
+        </div>
+        <button class="nav-button next-project" aria-label="Next project">
+          Next <i class="fas fa-chevron-right"></i>
+          <div class="nav-arrow right"></div>
+        </button>
+      </div>
+      
+      <div class="roman-decorative-elements">
+        <div class="laurel-left"></div>
+        <div class="laurel-right"></div>
+        <div class="roman-border-top"></div>
+        <div class="roman-border-bottom"></div>
+        <div class="column-pillar left"></div>
+        <div class="column-pillar right"></div>
+        <div class="mosaic-corner top-left"></div>
+        <div class="mosaic-corner top-right"></div>
+        <div class="mosaic-corner bottom-left"></div>
+        <div class="mosaic-corner bottom-right"></div>
+      </div>
+    `;
+
+    if (project.codeSample) {
+      const container = this.modalContent.querySelector('#code-sample-container');
+      if (container) {
+        const codeSection = document.createElement('div');
+        codeSection.className = 'code-section';
+        
+        const sectionHeader = document.createElement('div');
+        sectionHeader.className = 'section-header';
+        sectionHeader.innerHTML = `
+          <div class="section-decoration"></div>
+          <h3>Code Sample</h3>
+          <div class="section-decoration"></div>
+        `;
+        
+        codeSection.appendChild(sectionHeader);
+        
+        const codeViewer = this.createCodeViewer(
+          project.codeSample.code, 
+          project.codeSample.language, 
+          project.codeSample.title
+        );
+        
+        codeSection.appendChild(codeViewer);
+        container.appendChild(codeSection);
+      }
+    }
+
+    const closeButton = this.modalContent.querySelector('.project-modal-close');
+    closeButton.addEventListener('click', () => this.closeModal());
+
+    this.bindNavigationButtons();
+
+    this.modalOverlay.classList.add('active');
+    document.body.classList.add('modal-open');
+
+    setTimeout(() => {
+      this.modalOverlay.classList.add('visible');
+      this.modalContent.classList.add('visible');
+    }, 50);
+
+    this.modalContent.setAttribute('aria-label', `Project details: ${project.title}`);
+    this.modalContent.setAttribute('tabindex', '-1');
+    this.modalContent.focus();
+
+    setTimeout(() => {
+      const sections = this.modalContent.querySelectorAll('.project-modal-header, .project-description, .section-header, .project-details-list, .project-links, .code-section');
+      sections.forEach((section, index) => {
+        section.style.animationDelay = `${0.1 + (index * 0.1)}s`;
+        section.classList.add('animate-in');
+      });
+
+      const detailItems = this.modalContent.querySelectorAll('.project-details-list li');
+      detailItems.forEach((item, i) => {
+        item.style.animationDelay = `${0.5 + (i * 0.1)}s`;
+        item.classList.add('detail-reveal');
+      });
+      
+      this.applyDynamicLightingToModalElements();
+    }, 200);
+  }
+
+  applyDynamicLightingToModalElements() {
+    setTimeout(() => {
+      const buttons = this.modalContent.querySelectorAll('.nav-button, .project-link-button, .code-viewer-button');
+      buttons.forEach(button => {
+        this.addDynamicLightingToElement(button);
+      });
+      
+      const codeViewer = this.modalContent.querySelector('.code-viewer-container');
+      if (codeViewer) {
+        this.addDynamicLightingToElement(codeViewer);
+      }
+    }, 300);
+  }
+
+  closeModal() {
+    this.modalOverlay.classList.remove('visible');
+    this.modalContent.classList.remove('visible');
+
+    setTimeout(() => {
+      this.modalOverlay.classList.remove('active');
+      document.body.classList.remove('modal-open');
+
+      const projectId = this.currentProject;
+      if (projectId) {
+        const button = document.querySelector(`.view-project-btn[data-project-id="${projectId}"]`);
+        if (button) button.focus();
+      }
+
+      this.currentProject = null;
+    }, 500);
+  }
+
+  bindNavigationButtons() {
+    const prevButton = this.modalContent.querySelector('.prev-project');
+    const nextButton = this.modalContent.querySelector('.next-project');
+
+    const projectIds = Object.keys(this.projectData);
+    const currentIndex = projectIds.indexOf(this.currentProject);
+
+    prevButton.addEventListener('click', () => {
+      const prevIndex = currentIndex > 0 ? currentIndex - 1 : projectIds.length - 1;
+      this.openProject(projectIds[prevIndex]);
     });
+
+    nextButton.addEventListener('click', () => {
+      const nextIndex = currentIndex < projectIds.length - 1 ? currentIndex + 1 : 0;
+      this.openProject(projectIds[nextIndex]);
+    });
+
+    prevButton.addEventListener('mouseenter', () => {
+      prevButton.classList.add('hover');
+      const arrow = prevButton.querySelector('.nav-arrow');
+      if (arrow) arrow.classList.add('hover');
+    });
+
+    prevButton.addEventListener('mouseleave', () => {
+      prevButton.classList.remove('hover');
+      const arrow = prevButton.querySelector('.nav-arrow');
+      if (arrow) arrow.classList.remove('hover');
+    });
+
+    nextButton.addEventListener('mouseenter', () => {
+      nextButton.classList.add('hover');
+      const arrow = nextButton.querySelector('.nav-arrow');
+      if (arrow) arrow.classList.add('hover');
+    });
+
+    nextButton.addEventListener('mouseleave', () => {
+      nextButton.classList.remove('hover');
+      const arrow = nextButton.querySelector('.nav-arrow');
+      if (arrow) arrow.classList.remove('hover');
+    });
+  }
+
+  filterProjects(category) {
+    if (this.animationInProgress) return;
+    this.animationInProgress = true;
+    this.activeCategory = category;
+
+    document.querySelectorAll('.filter-button').forEach(button => {
+      button.classList.toggle('active', button.dataset.category === category);
+    });
+
+    const projectCards = document.querySelectorAll('.project-card');
+    let visibleCount = 0;
+
+    projectCards.forEach((card, index) => {
+      const categories = card.dataset.categories ? card.dataset.categories.split(' ') : [];
+      const shouldShow = category === 'All' || categories.includes(category);
+
+      card.classList.remove('slide-in', 'fade-out');
+
+      if (shouldShow) {
+        setTimeout(() => {
+          card.style.display = '';
+          card.classList.add('slide-in');
+          visibleCount++;
+        }, index * 50);
+      } else {
+        card.classList.add('fade-out');
+        setTimeout(() => {
+          card.style.display = 'none';
+        }, 300);
+      }
+    });
+
+    setTimeout(() => {
+      this.animationInProgress = false;
+    }, 500);
+  }
+
+  revealOnScroll() {
+    const revealElements = document.querySelectorAll('.scroll-reveal');
     
-    // Initialize any required CSS state
-    modal.style.display = 'none';
-    modal.style.display = ''; // Reset to CSS control
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
     
-    return {
-        openModal,
-        closeModal,
-        navigateProject
-    };
+    revealElements.forEach(el => observer.observe(el));
+  }
 }

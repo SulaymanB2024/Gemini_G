@@ -1,0 +1,342 @@
+/**
+ * _skill-ecosystem.css
+ * Dynamic Skill Ecosystem Visualization animations and styles
+ * Version: 2.1 - Enhanced Visual Effects
+ */
+
+/* ======= Skill Highlight Animations ======= */
+
+/* Dramatic pulsing animation for highlighted items */
+@keyframes ecosystem-pulse {
+    0% {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 0 0 2px var(--color-gold-light);
+    }
+    50% {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), 0 0 0 3px var(--color-gold-medium);
+        transform: translateY(-6px) scale(1.03);
+    }
+    100% {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 0 0 2px var(--color-gold-light);
+    }
+}
+
+/* Gleaming effect for active skill tags */
+@keyframes ecosystem-gleam {
+    0% {
+        transform: translate(-150%, -150%) rotate(45deg);
+        opacity: 0;
+    }
+    30% {
+        opacity: 0.7;
+    }
+    70% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translate(150%, 150%) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* Soft pulse for tag highlights */
+@keyframes ecosystem-tag-pulse {
+    0% {
+        box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(218, 165, 32, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(218, 165, 32, 0.3);
+    }
+}
+
+/* Subtle border glow animation */
+@keyframes ecosystem-border-glow {
+    0% {
+        border-color: var(--color-gold-light);
+    }
+    50% {
+        border-color: var(--color-gold-dark);
+    }
+    100% {
+        border-color: var(--color-gold-light);
+    }
+}
+
+/* Laurel pulsing animation */
+@keyframes ecosystem-laurel-pulse {
+    0% {
+        opacity: 0.2;
+        transform: scale(0.98);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(1.02);
+    }
+    100% {
+        opacity: 0.2;
+        transform: scale(0.98);
+    }
+}
+
+/* Click feedback animation */
+@keyframes ecosystem-click-feedback {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ======= Card Highlighting Effects ======= */
+
+/* Item highlighting (when related to selected skill) */
+.skill-highlight {
+    border-color: var(--color-gold-medium) !important;
+    transform: translateY(-5px) scale(1.02) !important;
+    z-index: 10 !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 0 2px var(--color-gold-light) !important;
+    animation: 
+        ecosystem-pulse 2.5s infinite alternate ease-in-out,
+        ecosystem-border-glow 3s infinite alternate !important;
+    position: relative !important;
+}
+
+/* Add inner glow to highlighted items */
+.skill-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(218, 165, 32, 0.15),
+        rgba(128, 0, 0, 0.05),
+        rgba(218, 165, 32, 0.15)
+    );
+    border-radius: inherit;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ======= Skill Tag Highlighting Effects ======= */
+
+/* Skill tag highlighting (when related to hovered item) */
+.tag-highlighted-by-item {
+    transform: translateY(-3px) scale(1.05) !important;
+    z-index: 5 !important;
+}
+
+.tag-highlighted-by-item .coin-face-inner {
+    transform: rotateY(0deg) !important; /* Ensure front face is showing */
+}
+
+.tag-highlighted-by-item .coin-front {
+    box-shadow: 0 0 0 2px var(--color-gold-light) !important;
+    animation: ecosystem-tag-pulse 1.5s infinite alternate ease-in-out !important;
+    border-color: var(--color-gold-medium) !important;
+    background-color: rgba(218, 165, 32, 0.05) !important;
+}
+
+/* Clicked feedback */
+.ecosystem-clicked {
+    animation: ecosystem-click-feedback 0.3s ease-in-out !important;
+}
+
+/* Prevent coin flip on active skill */
+.prevent-flip {
+    pointer-events: none !important;
+}
+.prevent-flip:hover .coin-face-inner {
+    transform: rotateY(0deg) !important;
+}
+
+/* Actively selected skill in ecosystem */
+.ecosystem-active {
+    transform: translateY(-4px) scale(1.05) !important;
+    z-index: 20 !important; /* Higher z-index to appear above other elements */
+}
+
+.ecosystem-active .coin-face-inner {
+    transform: rotateY(0deg) !important; /* Ensure front face is showing */
+}
+
+.ecosystem-active .coin-front {
+    border-color: var(--color-crimson-primary) !important;
+    border-width: 2px !important;
+    background-color: rgba(128, 0, 0, 0.05) !important;
+    box-shadow: 0 0 15px rgba(218, 165, 32, 0.5) !important;
+}
+
+/* Add shine effect for active ecosystem skills */
+.ecosystem-active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    transform-origin: center;
+    animation: ecosystem-gleam 3s infinite;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.7;
+    filter: blur(1px);
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+}
+
+/* ======= Non-Highlight States ======= */
+
+/* Dimmed items (not related to selected skill) */
+.item-dimmed {
+    opacity: 0.3 !important;
+    filter: grayscale(70%) !important;
+    transform: translateY(0) scale(0.98) !important;
+    transition: all 0.5s ease !important;
+}
+
+/* Hover effect on dimmed items to preview related elements */
+.item-dimmed:hover {
+    opacity: 0.7 !important;
+    filter: grayscale(10%) !important;
+    transform: translateY(-2px) scale(1) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* ======= Connection Lines (Experimental) ======= */
+
+/* Connection lines between related items - applied by JS */
+.ecosystem-connection {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        rgba(218, 165, 32, 0.2), 
+        rgba(218, 165, 32, 0.6), 
+        rgba(218, 165, 32, 0.2));
+    transform-origin: left center;
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    box-shadow: 0 0 5px rgba(218, 165, 32, 0.3);
+}
+
+/* ======= Base Element Transitions ======= */
+
+/* Smooth transitions for all ecosystem elements */
+.experience-item, .project-item, .leadership-item, .music-item {
+    transition: 
+        transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        opacity 0.5s ease,
+        filter 0.5s ease,
+        border-color 0.5s ease;
+    position: relative;
+}
+
+/* Smooth transitions for skill tags */
+.skill-tag {
+    transition: 
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ======= Enhanced Tooltip ======= */
+
+/* Enhanced tooltip for skill interconnections */
+.ecosystem-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transform: translateY(5px);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-gold-dark);
+    font-family: 'Cinzel', serif;
+}
+
+.ecosystem-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 5px 5px 5px;
+    border-style: solid;
+    border-color: transparent transparent var(--color-gold-dark) transparent;
+}
+
+.ecosystem-tooltip.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ======= Roman Themed Markers ======= */
+
+/* Roman numeral counter for related items */
+.ecosystem-related-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--color-gold-medium);
+    color: var(--color-dark-bg);
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 5;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.ecosystem-active .ecosystem-related-count {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Small decorative laurel around active skill */
+.ecosystem-active::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
+    background-image: url('/assets/images/decorative/laurel-outline.svg');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    animation: ecosystem-laurel-pulse 3s infinite ease-in-out;
+    animation-delay: 0.3s; /* Start after skill activation */
+}
